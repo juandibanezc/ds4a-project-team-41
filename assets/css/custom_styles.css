@@ -1,0 +1,13 @@
+.light{
+    background-color: #f5f8ff;
+    font-family: Roboto;
+    color: #393f5b; 
+    width: 90%;
+    float: right;
+}
+
+.sidebar{
+    background-color: white;
+    width: 10%;
+    float: left;
+}
