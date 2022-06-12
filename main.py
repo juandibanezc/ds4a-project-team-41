@@ -23,7 +23,24 @@ import requests
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content')
+    html.Div(
+                    id = 'sidebar-menu',
+                    className='sidebar',
+                    children=[
+                        html.Img(src='/assets/images/logo-alcaldia.png', style={'width':'80%', 'padding':'10% 0% 10% 0%'}),
+                        html.A('',href='/pqr_dashboard',className='button-base home'),
+                        html.A('',href='/pqr_reports',className='button-base informes'),
+                        html.A('',href='/pqr_exploration',className='button-base pqr'),
+                        
+                    ]),
+
+                html.Div(
+                    id = 'content-layout',
+                    className= 'light',
+                    children=[
+                        html.Div(id='page-content'),    
+                    ]
+                )
 ])
 
 if __name__ == '__main__':
