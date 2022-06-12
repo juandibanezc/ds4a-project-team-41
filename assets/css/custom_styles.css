@@ -1,13 +1,46 @@
+/* Main */
 .light{
     background-color: #f5f8ff;
-    font-family: Roboto;
+    font-family: Roboto, sans-serif;
     color: #393f5b; 
-    width: 90%;
+    width: 94%;
     float: right;
+    padding: 2%;
 }
 
 .sidebar{
     background-color: white;
-    width: 10%;
+    width: 6%;
     float: left;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+/* BUTTONS */
+.button-base{
+    background-size: 100%;
+    border: none;
+    background-color: white;
+    image-rendering: pixelated;
+    height: 3.5vw;
+    margin: 5% 5%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 60%;
+    border-radius: 30%;
+}
+.button-base:hover{
+    background-color: #ced6e8 ;
+}
+.button-base.home{
+    background-image: url(/assets/images/dashboard.png);
+}
+.button-base.informes{
+    background-image: url(/assets/images/informes.png);
+}
+.button-base.pqr{
+    background-image: url(/assets/images/pqr.png);
+}
+
