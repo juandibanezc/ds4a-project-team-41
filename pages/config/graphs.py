@@ -20,7 +20,7 @@ def graph_seguimiento_pqrs(ruta_db):
                             WHEN 5 THEN "Resuelto"
                             WHEN 6 THEN "Documento sin resp"
                         END AS estado, updated_at FROM Modulo_PQR_Sector_Salud"""
-    a=query(ruta,transaccion)
+    a=query(ruta_db,transaccion)
     a.updated_at=pd.to_datetime(a.updated_at)
     a["mes"]=a.updated_at.dt.month_name()
     a=a.groupby(['mes','estado']).agg({"updated_at":len})
