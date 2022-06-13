@@ -28,6 +28,7 @@ def graph_seguimiento_pqrs(ruta_db):
     a=a.sort_values(by=["updated_at"],ascending=False)
     a=a.rename(columns={"updated_at":"Cuenta"})
     fig = px.bar(a, x='mes', y='Cuenta',color="estado")
+    fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
     return fig
 def graph_heatmap_estado_dependence(ruta):
     """
