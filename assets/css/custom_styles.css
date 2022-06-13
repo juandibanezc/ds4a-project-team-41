@@ -6,6 +6,7 @@
     width: 94%;
     float: right;
     padding: 2%;
+    height: 100%;
 }
 
 .sidebar{
@@ -17,8 +18,29 @@
     flex-direction: column;
     align-items: center;
 }
+.box{
+    background-color: white;
+    border-radius: 10px;
+    /* border-width: 2px;
+    border-color: #393f5b;
+    border-style: solid;     */
+}
 
-/* BUTTONS */
+.box:hover{
+    box-shadow: #919ac1 4px 4px 2px;
+    transition: transform 600ms, box-shadow 600ms;
+    transform: scale(1.15);
+}
+
+.graficos{
+    text-align: center;
+    font-weight: bolder;
+    font-size: x-large;
+}
+
+
+/*#region BUTTONS */
+
 .button-base{
     background-size: 100%;
     border: none;
@@ -33,6 +55,8 @@
 }
 .button-base:hover{
     background-color: #ced6e8 ;
+    transform: scale(1.2);
+    transition: transform 400ms;
 }
 .button-base.home{
     background-image: url(/assets/images/dashboard.png);
@@ -43,4 +67,32 @@
 .button-base.pqr{
     background-image: url(/assets/images/pqr.png);
 }
+/*#endregion */
 
+/*#region DASHBOARD */
+.custom-grid1{
+    display: grid;
+    grid-template: 30px / 20% 50%;
+    align-items: center;
+    padding-top: 5%;
+}
+
+.custom-grid2{
+    display: grid;
+    grid-template: 70px / 30% 70%;
+    text-align: center;
+    align-items: center;
+}
+
+.row.KPI{
+    display: grid;
+    grid-template: 120px / 23% 23% 23% 23%;
+    justify-content: space-evenly;
+}
+/*#endregion  */
+
+.row.graphRow1{
+    display: grid;
+    grid-template: 300px / 47.5% 47.5%;
+    justify-content: space-evenly;
+}

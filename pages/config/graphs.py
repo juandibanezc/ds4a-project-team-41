@@ -94,3 +94,32 @@ def clean_word_cloud(ruta):
     fig.update_xaxes(visible=False)
     fig.update_yaxes(visible=False)
     return fig
+
+    
+def graf_tipo_solicitud(ruta):
+    """
+    Esta funcion recibe como argumento la ruta de la db, y devuelve 4 graficas, segun el tipo de solicitud, por mes
+    en el siguiente orden:
+    "Denuncias","Solicitudes","Quejas","Reclamos"
+    
+    
+    """
+    transaccion="""SELECT Modulo_PQR_Sector_Salud.asunto, Modulo_PQR_Sector_Salud.fecha_radicacion, tipo_peticion.TIPO_PETICION 
+    FROM Modulo_PQR_Sector_Salud JOIN tipo_peticion 
+    ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_especifica_id=tipo_peticion.id"""
+    a=query(ruta,transaccion)
+    a.fecha_radicacion=pd.to_datetime(a.fecha_radicacion).dt.month_name()
+    solicitudes=['Denuncia', 'Solicitud', 'Queja', 'Reclamo']
+    titles=["Denuncias","Solicitudes","Quejas","Reclamos"]
+    i=0
+    figuras=[]
+    for solicitud in solicitudes:
+        df_temp=a[a.TIPO_PETICION==solicitud]
+        df_temp=df_temp.groupby("fecha_radicacion").agg({"TIPO_PETICION":len})
+        df_temp=df_temp.reset_index()
+        df_temp=df_temp.rename(columns={"TIPO_PETICION":"Cuenta"})
+        fig=px.bar(df_temp, x='fecha_radicacion', y='Cuenta',title=titles[i])
+        fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+        figuras.append(fig)
+        i=i+1
+    return figuras
