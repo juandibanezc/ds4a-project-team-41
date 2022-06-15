@@ -14,7 +14,7 @@ import logging as Flasklog
 #server.secret_key = os.urandom(16)
 #log = logging.Client()
 
-app = dash.Dash(__name__, #suppress_callback_exceptions=True, #  server=server,
+app = dash.Dash(__name__, suppress_callback_exceptions=True, #  server=server,
     external_stylesheets=[
         [dbc.themes.BOOTSTRAP]
     ])
