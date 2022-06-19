@@ -16,8 +16,12 @@ def KPI_1(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = "SELECT COUNT(DISTINCT id) as peticiones FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Peticion'"#.format(date1=date_filter[0], date2=date_filter[1])
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            q = """
+            SELECT COUNT(DISTINCT a.id) as peticiones 
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE b.TIPO_PETICION IN ('Peticion')"""
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'peticiones']
 
@@ -34,8 +38,12 @@ def KPI_2(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = "SELECT COUNT(DISTINCT id) as sugerencias FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Sugerencia'"#.format(date1=date_filter[0], date2=date_filter[1])
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            q = """
+            SELECT COUNT(DISTINCT a.id) as sugerencias 
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE b.TIPO_PETICION IN ('Solicitud')"""
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'sugerencias']
 
@@ -52,8 +60,12 @@ def KPI_3(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = "SELECT COUNT(DISTINCT id) as reclamos FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Reclamo'"#.format(date1=date_filter[0], date2=date_filter[1])
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            q = """
+            SELECT COUNT(DISTINCT a.id) as reclamos 
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE b.TIPO_PETICION IN ('Reclamo')"""
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'reclamos']
 
@@ -70,8 +82,12 @@ def KPI_4(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = "SELECT COUNT(DISTINCT id) as quejas FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Queja'"#.format(date1=date_filter[0], date2=date_filter[1])
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            q = """
+            SELECT COUNT(DISTINCT a.id) as quejas 
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE b.TIPO_PETICION IN ('Queja','Denuncia')"""
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'quejas']
 
@@ -88,21 +104,22 @@ def Graph_1(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            query = """   SELECT CASE glb_estado_id
-                                WHEN 1 THEN "Radicado"
-                                WHEN 2 THEN "Digitalizado"
-                                WHEN 3 THEN "En tramite"
-                                WHEN 4 THEN "Proceso cerrado"
-                                WHEN 5 THEN "Resuelto"
-                                WHEN 6 THEN "Documento sin resp"
-                            END AS estado, fecha_radicacion FROM Modulo_PQR_Sector_Salud"""
-                    #         WHERE fecha_radicacion BETWEEN {date1} AND {date2}
-                    # """.format(date1=date_filter[0], date2=date_filter[1])
+            q = """
+            SELECT 
+            CASE b.descripcion 
+            WHEN 'Radicado' THEN 'En Tramite'
+            WHEN 'Digitalizado' THEN 'En Tramite'
+            WHEN 'En Tramite' THEN 'En Tramite'
+            WHEN 'Proceso cerrado' THEN 'Resuelto'
+            WHEN 'Resuelto' THEN 'Resuelto'
+            WHEN 'Documentos sin respuesta' THEN 'Resuelto' END as estado, 
+            fecha_radicacion 
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN glb_estados b ON a.glb_estado_id = b.id"""
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
 
-            q = "SELECT estado_pqr as estado, fecha_radicacion FROM Modulo_PQR_Sector_Salud_Cleaned"#.format(date1=date_filter[0], date2=date_filter[1])
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
-
-            fig = graphs.graph_seguimiento_pqrs(query=q, ruta_db=r)
+            fig = graphs.graph_seguimiento_pqrs(df)
             graph_output = [dcc.Graph(id='seguimientoPQR_graph',
                                       figure=fig,
                                       config={'displaylogo': False})]
