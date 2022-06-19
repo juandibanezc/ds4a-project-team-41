@@ -55,54 +55,52 @@ def graph_seguimiento_pqrs(query, ruta_db):
     return fig
 
     
-# def graph_heatmap_estado_dependence(ruta):
-#     """
-#     Toma como argumento la ruta de la bse de datos de pqr, y devuelve un elemento plotly fig con el heatmap 
-#     entre estado y dependencia
-#     """
-#     b=controller.query(ruta,"""SELECT glb_dependencia_id, CASE
-#         glb_estado_id
-#                             WHEN 1 THEN "Radicado"
-#                             WHEN 2 THEN "Digitalizado"
-#                             WHEN 3 THEN "En tramite"
-#                             WHEN 4 THEN "Proceso cerrado"
-#                             WHEN 5 THEN "Resuelto"
-#                             WHEN 6 THEN "Documento sin resp"
-#         END AS estado FROM Modulo_PQR_Sector_Salud""")
-#     b.glb_dependencia_id=b.glb_dependencia_id.astype("string")
-#     estado_vs_dependencia = pd.crosstab(b["estado"], b["glb_dependencia_id"], normalize = 'columns')
-#     fig=px.imshow(estado_vs_dependencia, title="PQR processing stage (normalized for each dependence)",aspect="auto",labels=dict(x="glb_dependencia_id", y="Estado", color="processing stage"))
-#     return fig
+def graph_heatmap_estado_dependence(ruta):
+     """
+     Toma como argumento la ruta de la bse de datos de pqr, y devuelve un elemento plotly fig con el heatmap 
+     entre estado y dependencia
+     """
+     b=controller.query(ruta,"""SELECT glb_dependencia_id, CASE
+         glb_estado_id
+                             WHEN 1 THEN "Radicado"
+                             WHEN 2 THEN "Digitalizado"
+                             WHEN 3 THEN "En tramite"
+                             WHEN 4 THEN "Proceso cerrado"
+                             WHEN 5 THEN "Resuelto"
+                             WHEN 6 THEN "Documento sin resp"
+         END AS estado FROM Modulo_PQR_Sector_Salud""")
+     b.glb_dependencia_id=b.glb_dependencia_id.astype("string")
+     estado_vs_dependencia = pd.crosstab(b["estado"], b["glb_dependencia_id"], normalize = 'columns')
+     fig=px.imshow(estado_vs_dependencia, title="PQR processing stage (normalized for each dependence)",aspect="auto",labels=dict(x="glb_dependencia_id", y="Estado", color="processing stage"))
+     return fig
 
     
-# def clean_word_cloud(ruta): 
-#     c=controller.query(ruta,"""SELECT asunto FROM Modulo_PQR_Sector_Salud""")
-#     ### Getting a single string
-#     esp_stopwords = stopwords.words("spanish")
-#     nombre_text = ' '.join(c["asunto"].dropna())
-#     ## Splitting them into tokens
-#     word_tokens = nltk.word_tokenize(nombre_text)
-#     ## Removing the stopwords
-#     nombre_word_tokens_clean = [each for each in word_tokens if each.lower() not in esp_stopwords and len(each.lower()) > 2]
+ def clean_word_cloud(ruta): 
+     c=controller.query(ruta,"""SELECT asunto FROM Modulo_PQR_Sector_Salud""")
+     ### Getting a single string
+     esp_stopwords = stopwords.words("spanish")
+     nombre_text = ' '.join(c["asunto"].dropna())
+     ## Splitting them into tokens
+     word_tokens = nltk.word_tokenize(nombre_text)
+     ## Removing the stopwords
+     nombre_word_tokens_clean = [each for each in word_tokens if each.lower() not in esp_stopwords and len(each.lower()) > 2]
 
-#     word_cloud_text = ' '.join(nombre_word_tokens_clean)
-#     wordcloud = WordCloud(max_font_size=100, max_words=40, background_color="white",\
-#                               scale = 10,width=800, height=400).generate(word_cloud_text)
+     word_cloud_text = ' '.join(nombre_word_tokens_clean)
+     wordcloud = WordCloud(max_font_size=100, max_words=40, background_color="white",\
+                               scale = 10,width=800, height=400).generate(word_cloud_text)
 
-#     fig=px.imshow(wordcloud,aspect="auto")
-#     fig.update_xaxes(visible=False)
-#     fig.update_yaxes(visible=False)
-#     return fig
+     fig=px.imshow(wordcloud,aspect="auto")
+     fig.update_xaxes(visible=False)
+     fig.update_yaxes(visible=False)
+     return fig
 
     
-#def graf_tipo_solicitud(ruta):
+def graf_tipo_solicitud(ruta):
 
-#     """
-#     Esta funcion recibe como argumento la ruta de la db, y devuelve 4 graficas, segun el tipo de solicitud, por mes
-#     en el siguiente orden:
-#     "Denuncias","Solicitudes","Quejas","Reclamos"
-    
-    
+     """
+     Esta funcion recibe como argumento la ruta de la db, y devuelve 4 graficas, segun el tipo de solicitud, por mes
+     en el siguiente orden:
+     "Denuncias","Solicitudes","Quejas","Reclamos"
     """
     transaccion="""SELECT Modulo_PQR_Sector_Salud.asunto, Modulo_PQR_Sector_Salud.fecha_radicacion, tipo_peticion.TIPO_PETICION 
     FROM Modulo_PQR_Sector_Salud JOIN tipo_peticion 
@@ -131,4 +129,13 @@ def distribucion_por_sisben(ruta):
     a=a.sort_values(by='PUNTAJE',ascending=True)
     fig = px.pie(a, values='ID', names='PUNTAJE', title='Distribucion por SISBEN',width=800, height=800)
     return fig
+def distribucion_edad(ruta):
+    transaccion="""SELECT FECHA_NACIMIENTO FROM AMISALUD_TM_MAESTRO_AFILIADOS"""
+    a=controller.query(ruta,transaccion)
+    a.FECHA_NACIMIENTO=pd.to_datetime(a.FECHA_NACIMIENTO)
+    a['edad']=(datetime.datetime.now()-a.FECHA_NACIMIENTO).dt.days/365.25
+    fig = px.histogram(a, x="edad", nbins=10, labels={'x':'edad', 'y':'frecuencia'}, title="Diagrama de frecuencias de edad de usuarios que radican pqrs")
+    fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+    return fig
+
     
