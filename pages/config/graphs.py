@@ -10,10 +10,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import nltk
 from wordcloud import WordCloud
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.corpus import stopwords
-nltk.download('punkt')
+#nltk.download('punkt')
 import json
 
 def dateFilter(id):
@@ -42,16 +42,28 @@ def graph_seguimiento_pqrs(query, ruta_db):
     """
     
     df = model.querier(ruta_db, query)
+    df = df[df['fecha_radicacion'].str.contains("/", na=False)]
     df['fecha_radicacion'] = pd.to_datetime(df['fecha_radicacion'])
     df["mes"] = df['fecha_radicacion'].dt.month_name()
 
     df_g = df.groupby(['mes','estado']).agg(pqr_count=('fecha_radicacion', 'count'))
-    df_g = df_g.reset_index(drop=False)
+    df_g = df_g.sort_values(by='mes').reset_index(drop=False)
     fig = px.line(df_g, x="mes", y="pqr_count", color='estado',
         labels={"mes": "Mes",
                 "pqr_count": "Cantidad de PQRs",
                 "estado": "Estado de la PQR"}
     )
+    fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+    fig.update_layout(
+                       plot_bgcolor='#fff',
+                       font={
+                           'family': 'Rubik, sans-serif',
+                           'color': '#515365'
+                       },
+                       title_font_family='Rubik, sans-serif',
+                       title_font_size=15
+                       )
+
     return fig
 
     
@@ -102,32 +114,32 @@ def graph_seguimiento_pqrs(query, ruta_db):
 #     "Denuncias","Solicitudes","Quejas","Reclamos"
     
     
-    """
-    transaccion="""SELECT Modulo_PQR_Sector_Salud.asunto, Modulo_PQR_Sector_Salud.fecha_radicacion, tipo_peticion.TIPO_PETICION 
-    FROM Modulo_PQR_Sector_Salud JOIN tipo_peticion 
-    ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_especifica_id=tipo_peticion.id"""
-    a=query(ruta,transaccion)
-    a.fecha_radicacion=pd.to_datetime(a.fecha_radicacion).dt.month_name()
-    solicitudes=['Denuncia', 'Solicitud', 'Queja', 'Reclamo']
-    titles=["Denuncias","Solicitudes","Quejas","Reclamos"]
-    i=0
-    figuras=[]
-    for solicitud in solicitudes:
-        df_temp=a[a.TIPO_PETICION==solicitud]
-        df_temp=df_temp.groupby("fecha_radicacion").agg({"TIPO_PETICION":len})
-        df_temp=df_temp.reset_index()
-        df_temp=df_temp.rename(columns={"TIPO_PETICION":"Cuenta"})
-        fig=px.bar(df_temp, x='fecha_radicacion', y='Cuenta',title=titles[i])
-        fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
-        figuras.append(fig)
-        i=i+1
-    return figuras
-def distribucion_por_sisben(ruta):
-    transaccion="""SELECT ID, PUNTAJE FROM AMISALUD_TM_SISBEN_MENSUAL"""
-    a=query(r"C:\Users\pablo\Desktop\BASE DATOS IBAGUE\BDIBAGUE.db",transaccion)
-    a=a.groupby("PUNTAJE").agg({"ID":len})
-    a=a.reset_index()
-    a=a.sort_values(by='PUNTAJE',ascending=True)
-    fig = px.pie(a, values='ID', names='PUNTAJE', title='Distribucion por SISBEN',width=800, height=800)
-    return fig
+#     """
+#     transaccion="""SELECT Modulo_PQR_Sector_Salud.asunto, Modulo_PQR_Sector_Salud.fecha_radicacion, tipo_peticion.TIPO_PETICION 
+#     FROM Modulo_PQR_Sector_Salud JOIN tipo_peticion 
+#     ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_especifica_id=tipo_peticion.id"""
+#     a=query(ruta,transaccion)
+#     a.fecha_radicacion=pd.to_datetime(a.fecha_radicacion).dt.month_name()
+#     solicitudes=['Denuncia', 'Solicitud', 'Queja', 'Reclamo']
+#     titles=["Denuncias","Solicitudes","Quejas","Reclamos"]
+#     i=0
+#     figuras=[]
+#     for solicitud in solicitudes:
+#         df_temp=a[a.TIPO_PETICION==solicitud]
+#         df_temp=df_temp.groupby("fecha_radicacion").agg({"TIPO_PETICION":len})
+#         df_temp=df_temp.reset_index()
+#         df_temp=df_temp.rename(columns={"TIPO_PETICION":"Cuenta"})
+#         fig=px.bar(df_temp, x='fecha_radicacion', y='Cuenta',title=titles[i])
+#         fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+#         figuras.append(fig)
+#         i=i+1
+#     return figuras
+# def distribucion_por_sisben(ruta):
+#     transaccion="""SELECT ID, PUNTAJE FROM AMISALUD_TM_SISBEN_MENSUAL"""
+#     a=query(r"C:\Users\pablo\Desktop\BASE DATOS IBAGUE\BDIBAGUE.db",transaccion)
+#     a=a.groupby("PUNTAJE").agg({"ID":len})
+#     a=a.reset_index()
+#     a=a.sort_values(by='PUNTAJE',ascending=True)
+#     fig = px.pie(a, values='ID', names='PUNTAJE', title='Distribucion por SISBEN',width=800, height=800)
+#     return fig
     

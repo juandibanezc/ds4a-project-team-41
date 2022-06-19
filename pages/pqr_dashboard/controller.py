@@ -16,9 +16,10 @@ def KPI_1(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            #query = "".format(date1=date_filter[0], date2=date_filter[1])
-            #df = model.querier(query)
-            kpi_output = "15"#[df.loc['kpi']]
+            q = "SELECT COUNT(DISTINCT id) as peticiones FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Peticion'"#.format(date1=date_filter[0], date2=date_filter[1])
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            df = model.querier(ruta_db=r,query=q)
+            kpi_output = df.loc[0,'peticiones']
 
         else:
             kpi_output= ['An error ocurred, please try again']
@@ -33,9 +34,10 @@ def KPI_2(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            #query = "".format(date1=date_filter[0], date2=date_filter[1])
-            #df = model.querier(query)
-            kpi_output = "10"#[df.loc['kpi']]
+            q = "SELECT COUNT(DISTINCT id) as sugerencias FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Sugerencia'"#.format(date1=date_filter[0], date2=date_filter[1])
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            df = model.querier(ruta_db=r,query=q)
+            kpi_output = df.loc[0,'sugerencias']
 
         else:
             kpi_output= ['An error ocurred, please try again']
@@ -50,9 +52,10 @@ def KPI_3(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            #query = "".format(date1=date_filter[0], date2=date_filter[1])
-            #df = model.querier(query)
-            kpi_output = "20"#[df.loc['kpi']]
+            q = "SELECT COUNT(DISTINCT id) as reclamos FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Reclamo'"#.format(date1=date_filter[0], date2=date_filter[1])
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            df = model.querier(ruta_db=r,query=q)
+            kpi_output = df.loc[0,'reclamos']
 
         else:
             kpi_output= ['An error ocurred, please try again']
@@ -67,9 +70,10 @@ def KPI_4(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            #query = "".format(date1=date_filter[0], date2=date_filter[1])
-            #df = model.querier(query)
-            kpi_output = "15"#[df.loc['kpi']]
+            q = "SELECT COUNT(DISTINCT id) as quejas FROM Modulo_PQR_Sector_Salud_Cleaned WHERE tipo_solicitud = 'Queja'"#.format(date1=date_filter[0], date2=date_filter[1])
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+            df = model.querier(ruta_db=r,query=q)
+            kpi_output = df.loc[0,'quejas']
 
         else:
             kpi_output= ['An error ocurred, please try again']
@@ -95,7 +99,10 @@ def Graph_1(date_filter,url):
                     #         WHERE fecha_radicacion BETWEEN {date1} AND {date2}
                     # """.format(date1=date_filter[0], date2=date_filter[1])
 
-            fig = graphs.graph_seguimiento_pqrs(query, '/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db')
+            q = "SELECT estado_pqr as estado, fecha_radicacion FROM Modulo_PQR_Sector_Salud_Cleaned"#.format(date1=date_filter[0], date2=date_filter[1])
+            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/IBAGUEDB.db"
+
+            fig = graphs.graph_seguimiento_pqrs(query=q, ruta_db=r)
             graph_output = [dcc.Graph(id='seguimientoPQR_graph',
                                       figure=fig,
                                       config={'displaylogo': False})]
