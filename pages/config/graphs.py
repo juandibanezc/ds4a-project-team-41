@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 from nltk.corpus import stopwords
 nltk.download('punkt')
 import json
+import controller
 
 def dateFilter(id):
   output = [
@@ -75,7 +76,8 @@ def graph_heatmap_estado_dependence(ruta):
      return fig
 
     
- def clean_word_cloud(ruta): 
+def clean_word_cloud(ruta): 
+    
      c=controller.query(ruta,"""SELECT asunto FROM Modulo_PQR_Sector_Salud""")
      ### Getting a single string
      esp_stopwords = stopwords.words("spanish")
