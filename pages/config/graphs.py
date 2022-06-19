@@ -60,7 +60,7 @@ def graph_seguimiento_pqrs(query, ruta_db):
 #     Toma como argumento la ruta de la bse de datos de pqr, y devuelve un elemento plotly fig con el heatmap 
 #     entre estado y dependencia
 #     """
-#     b=query(ruta,"""SELECT glb_dependencia_id, CASE
+#     b=controller.query(ruta,"""SELECT glb_dependencia_id, CASE
 #         glb_estado_id
 #                             WHEN 1 THEN "Radicado"
 #                             WHEN 2 THEN "Digitalizado"
@@ -76,7 +76,7 @@ def graph_seguimiento_pqrs(query, ruta_db):
 
     
 # def clean_word_cloud(ruta): 
-#     c=query(ruta,"""SELECT asunto FROM Modulo_PQR_Sector_Salud""")
+#     c=controller.query(ruta,"""SELECT asunto FROM Modulo_PQR_Sector_Salud""")
 #     ### Getting a single string
 #     esp_stopwords = stopwords.words("spanish")
 #     nombre_text = ' '.join(c["asunto"].dropna())
@@ -95,7 +95,8 @@ def graph_seguimiento_pqrs(query, ruta_db):
 #     return fig
 
     
-# def graf_tipo_solicitud(ruta):
+#def graf_tipo_solicitud(ruta):
+
 #     """
 #     Esta funcion recibe como argumento la ruta de la db, y devuelve 4 graficas, segun el tipo de solicitud, por mes
 #     en el siguiente orden:
@@ -106,7 +107,7 @@ def graph_seguimiento_pqrs(query, ruta_db):
     transaccion="""SELECT Modulo_PQR_Sector_Salud.asunto, Modulo_PQR_Sector_Salud.fecha_radicacion, tipo_peticion.TIPO_PETICION 
     FROM Modulo_PQR_Sector_Salud JOIN tipo_peticion 
     ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_especifica_id=tipo_peticion.id"""
-    a=query(ruta,transaccion)
+    a=controller.query(ruta,transaccion)
     a.fecha_radicacion=pd.to_datetime(a.fecha_radicacion).dt.month_name()
     solicitudes=['Denuncia', 'Solicitud', 'Queja', 'Reclamo']
     titles=["Denuncias","Solicitudes","Quejas","Reclamos"]
@@ -124,7 +125,7 @@ def graph_seguimiento_pqrs(query, ruta_db):
     return figuras
 def distribucion_por_sisben(ruta):
     transaccion="""SELECT ID, PUNTAJE FROM AMISALUD_TM_SISBEN_MENSUAL"""
-    a=query(r"C:\Users\pablo\Desktop\BASE DATOS IBAGUE\BDIBAGUE.db",transaccion)
+    a=controller.query(r"C:\Users\pablo\Desktop\BASE DATOS IBAGUE\BDIBAGUE.db",transaccion)
     a=a.groupby("PUNTAJE").agg({"ID":len})
     a=a.reset_index()
     a=a.sort_values(by='PUNTAJE',ascending=True)
