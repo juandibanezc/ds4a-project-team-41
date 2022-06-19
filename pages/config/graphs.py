@@ -96,8 +96,7 @@ def graph_heatmap_estado_dependence(ruta):
 
     
 def graf_tipo_solicitud(ruta):
-
-     """
+    """
      Esta funcion recibe como argumento la ruta de la db, y devuelve 4 graficas, segun el tipo de solicitud, por mes
      en el siguiente orden:
      "Denuncias","Solicitudes","Quejas","Reclamos"
