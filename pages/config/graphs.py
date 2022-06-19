@@ -93,3 +93,12 @@ def graf_tipo_solicitud(ruta):
         figuras.append(fig)
         i=i+1
     return figuras
+def distribucion_por_sisben(ruta):
+    transaccion="""SELECT ID, PUNTAJE FROM AMISALUD_TM_SISBEN_MENSUAL"""
+    a=query(r"C:\Users\pablo\Desktop\BASE DATOS IBAGUE\BDIBAGUE.db",transaccion)
+    a=a.groupby("PUNTAJE").agg({"ID":len})
+    a=a.reset_index()
+    a=a.sort_values(by='PUNTAJE',ascending=True)
+    fig = px.pie(a, values='ID', names='PUNTAJE', title='Distribucion por SISBEN',width=800, height=800)
+    return fig
+    
