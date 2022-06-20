@@ -1,3 +1,4 @@
+from turtle import width
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
@@ -14,45 +15,44 @@ content = html.Div(children=[
                                       children=[html.Div(id="dashboard_KPIrow",
                                                         children=[
                                                                 html.Div(id="peticiones_box", children=[
-                                                                        html.Div(id="peticiones_title", className="custom-grid1", children=[
-                                                                                html.Img(src='/assets/images/peticiones-icon.png', style={'width':'70%', 'padding':'0%'}),
-                                                                                html.H6("Peticiones", style={'margin':'0', 'padding':'0 1% 0 1%', 'fontWeight':'bold'})
+                                                                        html.Div(id="peticiones_title", style={'float':'left', 'width':'40%'},className="", children=[
+                                                                                html.Img(src='/assets/images/peticiones-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
                                                                                 ]),
-                                                                        html.Div(id="peticiones_data_box", className="custom-grid2", children=[
-                                                                                html.H3("15", id='peticiones_count', style={'margin':'0', 'padding':'0 1% 0 5%', 'fontWeight':'bold'}),
-                                                                                html.Div("GRAFICO PETICIONES", id="peticiones_graph", style={'margin':'0', 'padding':'0 1% 0 1%', 'width':'100%'})
-                                                                                ])                                                        
+                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
+                                                                                html.H4("Peticiones", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
+                                                                                html.H3("15", id='peticiones_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                        ])                                                      
                                                                 ], className="box"),
+
+
                                                                 html.Div(id="sugerencias_box", children=[
-                                                                        html.Div(id="sugerencias_title", className="custom-grid1", children=[
-                                                                                html.Img(src='/assets/images/sugerencias-icon.png', style={'width':'70%', 'padding':'0%'}),
-                                                                                html.H6("Sugerencias", style={'margin':'0', 'padding':'0 1% 0 1%', 'fontWeight':'bold'})
+                                                                        html.Div(id="sugerencias_title", style={'float':'left', 'width':'40%'},className="", children=[
+                                                                                html.Img(src='/assets/images/sugerencias-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
                                                                                 ]),
-                                                                        html.Div(id="sugerencias_data_box", className="custom-grid2", children=[
-                                                                                html.H3("10", id='sugerencias_count', style={'margin':'0', 'padding':'0 1% 0 5%', 'fontWeight':'bold'}),
-                                                                                html.Div("GRAFICO SUGERENCIAS", id="sugerencias_graph", style={'margin':'0', 'padding':'0 1% 0 1%', 'width':'100%'})
-                                                                                ])                                                        
+                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
+                                                                                html.H4("Sugerencias", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
+                                                                                html.H3("15", id='sugerencias_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                        ])                                                
                                                                 ], className="box"),
-                                                                html.Div(id="reclamos_box", children=[
-                                                                        html.Div(id="reclamos_title", className="custom-grid1", children=[
-                                                                                html.Img(src='/assets/images/reclamos-icon.png', style={'width':'70%', 'padding':'0%'}),
-                                                                                html.H6("Reclamos", style={'margin':'0', 'padding':'0 1% 0 1%', 'fontWeight':'bold'})
+
+                                                                 html.Div(id="reclamos_box", children=[
+                                                                        html.Div(id="sugerencias_title", style={'float':'left', 'width':'40%'},className="", children=[
+                                                                                html.Img(src='/assets/images/reclamos-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
                                                                                 ]),
-                                                                        html.Div(id="reclamos_data_box", className="custom-grid2", children=[
-                                                                                html.H3("20", id='reclamos_count', style={'margin':'0', 'padding':'0 1% 0 5%', 'fontWeight':'bold'}),
-                                                                                html.Div("GRAFICO RECLAMOS", id="reclamos_graph", style={'margin':'0', 'padding':'0 1% 0 1%', 'width':'100%'})
-                                                                                ])                                                        
+                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
+                                                                                html.H4("Reclamos", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
+                                                                                html.H3("15", id='reclamos_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                        ])                                                
                                                                 ], className="box"),
-                                                                html.Div(id="quejas_box", children=[
-                                                                        html.Div(id="quejass_title", className="custom-grid1", children=[
-                                                                                html.Img(src='/assets/images/quejas-icon.png', style={'width':'70%', 'padding':'0%'}),
-                                                                                html.H6("Quejas", style={'margin':'0', 'padding':'0 1% 0 1%', 'fontWeight':'bold'})
+                                                                 html.Div(id="quejas_box", children=[
+                                                                        html.Div(id="quejas_title", style={'float':'left', 'width':'40%'},className="", children=[
+                                                                                html.Img(src='/assets/images/quejas-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
                                                                                 ]),
-                                                                        html.Div(id="quejas_data_box", className="custom-grid2", children=[
-                                                                                html.H3("15", id='quejas_count', style={'margin':'0', 'padding':'0 1% 0 5%', 'fontWeight':'bold'}),
-                                                                                html.Div("GRAFICO QUEJAS", id="quejas_graph", style={'margin':'0', 'padding':'0 1% 0 1%', 'width':'100%'})
-                                                                                ])                                                           
-                                                                ], className="box")
+                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
+                                                                                html.H4("Quejas", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
+                                                                                html.H3("15", id='quejas_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                        ])                                                
+                                                                ], className="box"),
                                                         ], className='row KPI')]
                                                         ),
                           html.Br(),         
@@ -60,24 +60,61 @@ content = html.Div(children=[
                                       children=[html.Div(id="dashboard_graphRow_1",
                                                         children=[
                                                                 html.Div(id="seguimientoPQR_box", children=[
-                                                                        html.H4("Seguimiento de PQRs", id="seguimientoPQR_title"),
+                                                                        html.H4("Seguimiento de PQRs", id="seguimientoPQR_title", className="title"),
+                                                                        html.Div(id="date-filters-div",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="pqr_dashboard")),
                                                                         html.Div("GRAFICO DE SEGUMIENTO DE PQRS", id="seguimientoPQR_graph", className="graficos")
                                                                 ], className='box'),
                                                                 html.Div(id="distribucionPQRCOMUNA_box", children=[
-                                                                        html.H4("Distribución de PQRs por Comunas", id="distribucionPQRCOMUNA_title"),
+                                                                        html.H4("Distribución de PQRs por Comunas", id="distribucionPQRCOMUNA_title",className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
                                                                         html.Div("GRAFICO DE DISTRIBUCIÓN DE PQRS POR COMUNAS", id="distribucionPQRCOMUNA_graph", className="graficos")
                                                                 ], className='box')
 
                                                         ], className='row graphRow1')]),
                           html.Br(),
                           dcc.Loading(id='loading_dashboard_4',
-                                      children=[html.Div(id="dashboard_graphRow2",
-                                      className='row'
-                                   )]),
+                                      children=[html.Div(id="dashboard_graphRow_1",
+                                                        children=[
+                                                                html.Div(id="distribucionEPS_box", children=[
+                                                                        html.H4("Distribución por EPS", id="", className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR EPS", id="distribucionEPS_graph", className="graficos")
+                                                                ], className='box'),
+                                                                html.Div(id="distribucionIPS_box", children=[
+                                                                        html.H4("Distribución por IPS", id="",className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR IPS", id="distribucionIPS_graph", className="graficos")
+                                                                ], className='box'),
+                                                                html.Div(id="distribucionSISBEN_box", children=[
+                                                                        html.H4("Distribución por SISBEN", id="",className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR SISBEN", id="distribucionSISBEN_graph", className="graficos")
+                                                                ], className='box')
+
+                                                        ], className='row graphRow2')]),
+                          html.Br(),
                           dcc.Loading(id='loading_dashboard_5',
-                                      children=[html.Div(id="dashboard_graphRow3",
-                                      className='row'
-                                          )]),
+                                      children=[html.Div(id="dashboard_graphRow_1",
+                                                        children=[
+                                                                html.Div(id="", children=[
+                                                                        html.H4("Tipo de PQR vs EPS", id="", className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE PQR VS EPS", id="PQRVSEPS_graph", className="graficos")
+                                                                ], className='box'),
+                                                                html.Div(id="", children=[
+                                                                        html.H4("Tipo de PQR vs COMUNAS", id="",className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE PQR VS COMUNAS", id="PQRVSCOMUNAS_graph", className="graficos")
+                                                                ], className='box')
+
+                                                        ], className='row graphRow1')]),
                    ]
 )
 
@@ -85,9 +122,7 @@ layout = html.Div(className='container-fluid',
                               children=[  
                               html.Div(className='row',
                                       children=[
-                                      html.H1(id='dashboard-title', children = 'PQR Dashboard', className="col-12 col-md-6"),
-                                      html.Div(id="date-filters-div",className="row col-12 col-md-6 p-0", style={"width":"40%"},children=
-                                                    graphs.dateFilter(id="pqr_dashboard"))
+                                      html.H1(id='dashboard-title', children = 'PQR Dashboard', className="col-12 col-md-6", style={'font-weight': 'bolder', 'font-size': 'xxx-large'}),
                                       ]),
                               html.Div(id='div-dashboard-MainContainer',
                                        children=content)])
