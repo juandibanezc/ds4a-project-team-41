@@ -15,7 +15,7 @@ from nltk.corpus import stopwords
 from nltk.corpus import stopwords
 #nltk.download('punkt')
 import json
-
+import controller
 def dateFilter(id):
   output = [
               html.Div(className="col-8 p-0",children=[
@@ -158,6 +158,16 @@ def graph_distribucion_edad(df):
                        title_font_size=15
                        )
 
+    return fig
+def tipo_pqr_vs_eps(ruta):
+    transaccion="""SELECT tipo_peticion.TIPO_PETICION, glb_entidads.razon_social 
+    FROM Modulo_PQR_Sector_Salud JOIN glb_entidads 
+    ON Modulo_PQR_Sector_Salud.glb_entidad_id=glb_entidads.id JOIN tipo_peticion ON 
+    Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id=tipo_peticion.ID
+    """
+    a=controller.query(ruta,transaccion)
+    df=pd.crosstab(a["razon_social"],a["TIPO_PETICION"])
+    fig=px.imshow(df,aspect="auto",labels=dict(x="Tipo de peticion", y="Entidad prestadora de salud", color="Numero de peticiones"))
     return fig    
     
 # def graph_heatmap_estado_dependence(ruta):
