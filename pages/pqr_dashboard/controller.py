@@ -21,7 +21,7 @@ def KPI_1(date_filter,url):
             FROM Modulo_PQR_Sector_Salud a
             LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
             WHERE b.TIPO_PETICION IN ('Peticion')"""
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
+            r = "./BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'peticiones']
 
@@ -43,7 +43,7 @@ def KPI_2(date_filter,url):
             FROM Modulo_PQR_Sector_Salud a
             LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
             WHERE b.TIPO_PETICION IN ('Solicitud')"""
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
+            r = "./BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'sugerencias']
 
@@ -65,7 +65,7 @@ def KPI_3(date_filter,url):
             FROM Modulo_PQR_Sector_Salud a
             LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
             WHERE b.TIPO_PETICION IN ('Reclamo')"""
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
+            r = "./BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'reclamos']
 
@@ -87,7 +87,7 @@ def KPI_4(date_filter,url):
             FROM Modulo_PQR_Sector_Salud a
             LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
             WHERE b.TIPO_PETICION IN ('Queja','Denuncia')"""
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
+            r = "./BDIBAGUE.db"
             df = model.querier(ruta_db=r,query=q)
             kpi_output = df.loc[0,'quejas']
 
@@ -100,7 +100,7 @@ def KPI_4(date_filter,url):
 @app.callback([Output('seguimientoPQR_graph','children')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
-def Graph_1(date_filter,url):
+def graph_seguimiento_pqrs(date_filter,url):
 
         if url == '/pqr_dashboard':
 
@@ -116,7 +116,7 @@ def Graph_1(date_filter,url):
             fecha_radicacion 
             FROM Modulo_PQR_Sector_Salud a
             LEFT OUTER JOIN glb_estados b ON a.glb_estado_id = b.id"""
-            r = "/Users/juan/Documents/DS4A /Final_Project/ds4a-project-team-41/BDIBAGUE.db"
+            r = "./BDIBAGUE.db"
             df = model.querier(ruta_db=r, query=q)
 
             fig = graphs.graph_seguimiento_pqrs(df)
@@ -134,14 +134,22 @@ def Graph_1(date_filter,url):
 # @app.callback([Output('distribucionPQRCOMUNA_graph','children')],
 #               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
 #                Input('url', 'pathname')])
-# def Graph_2(date_filter,url):
+# def graph_distribucion_comunas(date_filter,url):
 
 #         if url == '/pqr_dashboard':
 
-#             query = "".format(date1=date_filter[0], date2=date_filter[1])
-#             df = model.querier(query)
+#             q = """
+#             SELECT 
+#             fecha_radicacion 
+#             FROM Modulo_PQR_Sector_Salud a
+#             LEFT OUTER JOIN glb_estados b ON a.glb_estado_id = b.id"""
+#             r = "./BDIBAGUE.db"
+#             df = model.querier(ruta_db=r, query=q)
 
-#             graph_output = "graph function"
+#             fig = graphs.graph_seguimiento_pqrs(df)
+#             graph_output = [dcc.Graph(id='seguimientoPQR_graph',
+#                                       figure=fig,
+#                                       config={'displaylogo': False})]
 
 #         else:
 #             graph_output= ['An error ocurred, please try again']
@@ -149,94 +157,138 @@ def Graph_1(date_filter,url):
 #         return [graph_output]
 
 
-# # **** Graph 3 ****
-# @app.callback([Output('dashboard_KPIrow3','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def Graph_3(date_filter,url):
+# **** Graph 3 ****
+@app.callback([Output('distribucionEPS_graph','children')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_distribucion_eps(date_filter,url):
 
-#         if url == '/pqr_dashboard':
+        if url == '/pqr_dashboard':
 
-#             query = "".format(date1=date_filter[0], date2=date_filter[1])
-#             df = model.querier(query)
+            q = """
+            SELECT 
+            a.id,
+            b.razon_social as EPS
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN glb_entidads b ON a.glb_entidad_id = b.id
+            WHERE EPS IS NOT NULL"""
+            r = "./BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
 
-#             graph_output = "graph function"
+            fig = graphs.graph_distribucion_eps(df)
+            graph_output = [dcc.Graph(id='distribucionEPS_graph',
+                                      figure=fig,
+                                      config={'displaylogo': False})]
 
-#         else:
-#             graph_output= ['An error ocurred, please try again']
+        else:
+            graph_output= ['An error ocurred, please try again']
 
-#         return [graph_output]
-
-
-# # **** Graph 4 ****
-# @app.callback([Output('dashboard_KPIrow4','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def Graph_4(date_filter,url):
-
-#         if url == '/pqr_dashboard':
-
-#             query = "".format(date1=date_filter[0], date2=date_filter[1])
-#             df = model.querier(query)
-
-#             graph_output = "graph function"
-
-#         else:
-#             graph_output= ['An error ocurred, please try again']
-
-#         return [graph_output]
+        return [graph_output]
 
 
-# # **** Graph 5 ****
-# @app.callback([Output('dashboard_KPIrow5','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def Graph_5(date_filter,url):
+# **** Graph 4 ****
+@app.callback([Output('distribucionIPS_graph','children')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_distribucion_ips(date_filter,url):
 
-#         if url == '/pqr_dashboard':
+        if url == '/pqr_dashboard':
 
-#             query = "".format(date1=date_filter[0], date2=date_filter[1])
-#             df = model.querier(query)
+            q = """
+            SELECT 
+            a.id,
+            b.razon_social as EPS
+            FROM Modulo_PQR_Sector_Salud a
+            LEFT OUTER JOIN glb_entidads b ON a.glb_entidad_id = b.id
+            WHERE EPS IS NOT NULL"""
+            r = "./BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
 
-#             graph_output = "graph function"
+            fig = graphs.graph_distribucion_eps(df)
+            graph_output = [dcc.Graph(id='distribucionIPS_graph',
+                                      figure=fig,
+                                      config={'displaylogo': False})]
 
-#         else:
-#             graph_output= ['An error ocurred, please try again']
+        else:
+            graph_output= ['An error ocurred, please try again']
 
-#         return [graph_output]
+        return [graph_output]
 
-# # **** Graph 6 ****
-# @app.callback([Output('dashboard_KPIrow6','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def Graph_6(date_filter,url):
 
-#         if url == '/pqr_dashboard':
+# **** Graph 5 ****
+@app.callback([Output('distribucionSISBEN_graph','children')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_distribucion_sisben(date_filter,url):
 
-#             query = "".format(date1=date_filter[0], date2=date_filter[1])
-#             df = model.querier(query)
+        if url == '/pqr_dashboard':
 
-#             graph_output = "graph function"
+            q = """
+            SELECT 
+            ID,
+            PUNTAJE as sisben
+            FROM AMISALUD_TM_SISBEN_MENSUAL"""
+            r = "./BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
 
-#         else:
-#             graph_output= ['An error ocurred, please try again']
+            fig = graphs.graph_distribucion_sisben(df)
+            graph_output = [dcc.Graph(id='distribucionIPS_graph',
+                                      figure=fig,
+                                      config={'displaylogo': False})]
 
-#         return [graph_output]
+        else:
+            graph_output= ['An error ocurred, please try again']
 
-# # **** Graph 7 ****
-# @app.callback([Output('dashboard_KPIrow7','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def Graph_7(date_filter,url):
+        return [graph_output]
 
-#         if url == '/pqr_dashboard':
+# **** Graph 6 ****
+@app.callback([Output('distribucionSexo_graph','children')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_distribucion_sexo(date_filter,url):
 
-#             query = "".format(date1=date_filter[0], date2=date_filter[1])
-#             df = model.querier(query)
+        if url == '/pqr_dashboard':
 
-#             graph_output = "graph function"
+            q = """
+            SELECT 
+            ID,
+            SEXO
+            FROM AMISALUD_TM_MAESTRO_AFILIADOS"""
+            r = "./BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
 
-#         else:
-#             graph_output= ['An error ocurred, please try again']
+            fig = graphs.graph_distribucion_sexo(df)
+            graph_output = [dcc.Graph(id='distribucionSexo_graph',
+                                      figure=fig,
+                                      config={'displaylogo': False})]
 
-#         return [graph_output]
+        else:
+            graph_output= ['An error ocurred, please try again']
+
+        return [graph_output]
+
+# **** Graph 7 ****
+@app.callback([Output('distribucionEdad_graph','children')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_distribucion_edad(date_filter,url):
+
+        if url == '/pqr_dashboard':
+
+            q = """
+            SELECT 
+            ID,
+            FECHA_NACIMIENTO
+            FROM AMISALUD_TM_MAESTRO_AFILIADOS"""
+            r = "./BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
+
+            fig = graphs.graph_distribucion_edad(df)
+            graph_output = [dcc.Graph(id='distribucionEdad_graph',
+                                      figure=fig,
+                                      config={'displaylogo': False})]
+
+        else:
+            graph_output= ['An error ocurred, please try again']
+
+        return [graph_output]

@@ -64,6 +64,101 @@ def graph_seguimiento_pqrs(df):
 
     return fig
 
+def graph_distribucion_eps(df):
+
+    df_g = df.groupby(['EPS']).agg(pqr_count=('id', 'count'))
+    df_g = df_g.sort_values(by='pqr_count').reset_index(drop=False)
+    fig = px.bar(df_g, x="pqr_count", y="EPS", orientation='h',
+        labels={"EPS": "EPS",
+                "pqr_count": "Cantidad de PQRs"}
+    )
+    fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+    fig.update_layout(
+                       plot_bgcolor='#fff',
+                       font={
+                           'family': 'Rubik, sans-serif',
+                           'color': '#515365'
+                       },
+                       title_font_family='Rubik, sans-serif',
+                       title_font_size=15
+                       )
+
+    return fig
+
+
+def graph_distribucion_sisben(df):
+
+    df['sisben'] = df['sisben'].str[0]
+    df_g = df.groupby(['sisben']).agg(pqr_count=('ID', 'count'))
+    df_g = df_g.sort_values(by='pqr_count').reset_index(drop=False)
+    fig = px.pie(df_g, values='pqr_count', names='sisben')
+    fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+    fig.update_layout(
+                       plot_bgcolor='#fff',
+                       font={
+                           'family': 'Rubik, sans-serif',
+                           'color': '#515365'
+                       },
+                       title_font_family='Rubik, sans-serif',
+                       title_font_size=15
+                       )
+
+    return fig
+
+
+def graph_distribucion_sexo(df):
+
+    df_g = df.groupby(['SEXO']).agg(pqr_count=('ID', 'count'))
+    df_g = df_g.sort_values(by='pqr_count').reset_index(drop=False)
+    fig = px.pie(df_g, values='pqr_count', names='SEXO')
+    fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+    fig.update_layout(
+                       plot_bgcolor='#fff',
+                       font={
+                           'family': 'Rubik, sans-serif',
+                           'color': '#515365'
+                       },
+                       title_font_family='Rubik, sans-serif',
+                       title_font_size=15
+                       )
+
+    return fig
+
+
+def graph_distribucion_edad(df):
+
+    df.FECHA_NACIMIENTO=pd.to_datetime(df.FECHA_NACIMIENTO)
+    df['edad']=(datetime.now()-df.FECHA_NACIMIENTO).dt.days/365.25
+    for i in range(len(df)):
+      if df.loc[i,'edad'] <= 11:
+        df.loc[i,'edad_str'] = "INFANTES MENORES DE 11 AÑOS"
+      elif (df.loc[i,'edad'] >= 12) & (df.loc[i,'edad'] <= 18):
+        df.loc[i,'edad_str'] = "ADOLESCENTE (12 A 18 AÑOS)"
+      elif (df.loc[i,'edad'] >= 19) & (df.loc[i,'edad'] <= 26):
+        df.loc[i,'edad_str'] = "JOVEN (19-26 AÑOS)"
+      elif (df.loc[i,'edad'] >= 27) & (df.loc[i,'edad'] <= 59):
+        df.loc[i,'edad_str'] = "ADULTOS (27 A 59 AÑOS)"
+      elif df.loc[i,'edad'] > 59:
+        df.loc[i,'edad_str'] = "ADULTO MAYOR (MÁS DE 59 AÑOS)"
+      else:
+        df.loc[i,'edad_str'] = "SIN INFORMACIÓN"
+      
+
+    df_g = df.groupby(['edad_str']).agg(pqr_count=('ID', 'count'))
+    df_g = df_g.sort_values(by='pqr_count',ascending=False).reset_index(drop=False)
+    fig = px.funnel(df_g, x='pqr_count', y='edad_str', labels={'edad_str':'Edad'})
+    fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+    fig.update_layout(
+                       plot_bgcolor='#fff',
+                       font={
+                           'family': 'Rubik, sans-serif',
+                           'color': '#515365'
+                       },
+                       title_font_family='Rubik, sans-serif',
+                       title_font_size=15
+                       )
+
+    return fig    
     
 # def graph_heatmap_estado_dependence(ruta):
 #      """
@@ -174,13 +269,7 @@ def graph_seguimiento_pqrs(df):
 #     a=a.sort_values(by='PUNTAJE',ascending=True)
 #     fig = px.pie(a, values='ID', names='PUNTAJE', title='Distribucion por SISBEN',width=800, height=800)
 #     return fig
-# def distribucion_edad(ruta):
-#     transaccion="""SELECT FECHA_NACIMIENTO FROM AMISALUD_TM_MAESTRO_AFILIADOS"""
-#     a=controller.query(ruta,transaccion)
-#     a.FECHA_NACIMIENTO=pd.to_datetime(a.FECHA_NACIMIENTO)
-#     a['edad']=(datetime.datetime.now()-a.FECHA_NACIMIENTO).dt.days/365.25
-#     fig = px.histogram(a, x="edad", nbins=10, labels={'x':'edad', 'y':'frecuencia'}, title="Diagrama de frecuencias de edad de usuarios que radican pqrs")
-#     fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)', 'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
-#     return fig
+
+
 
     

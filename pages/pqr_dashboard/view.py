@@ -75,30 +75,42 @@ content = html.Div(children=[
                                                         ], className='row graphRow1')]),
                           html.Br(),
                           dcc.Loading(id='loading_dashboard_4',
-                                      children=[html.Div(id="dashboard_graphRow_1",
+                                      children=[html.Div(id="dashboard_graphRow_2",
                                                         children=[
                                                                 html.Div(id="distribucionEPS_box", children=[
-                                                                        html.H4("Distribución por EPS", id="", className="title"),
+                                                                        html.H4("Distribución por Entidad de Salud", id="", className="title"),
                                                                         html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
                                                                                 children=graphs.dateFilter(id="")),
-                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR EPS", id="distribucionEPS_graph", className="graficos")
-                                                                ], className='box'),
-                                                                html.Div(id="distribucionIPS_box", children=[
-                                                                        html.H4("Distribución por IPS", id="",className="title"),
-                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
-                                                                                children=graphs.dateFilter(id="")),
-                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR IPS", id="distribucionIPS_graph", className="graficos")
+                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR ENTIDAD", id="distribucionEPS_graph", className="graficos")
                                                                 ], className='box'),
                                                                 html.Div(id="distribucionSISBEN_box", children=[
-                                                                        html.H4("Distribución por SISBEN", id="",className="title"),
+                                                                        html.H4("Distribución por Grupo de Sisben", id="",className="title"),
                                                                         html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
                                                                                 children=graphs.dateFilter(id="")),
                                                                         html.Div("GRAFICO DE DISTRIBUCIÓN POR SISBEN", id="distribucionSISBEN_graph", className="graficos")
                                                                 ], className='box')
 
-                                                        ], className='row graphRow2')]),
+                                                        ], className='row graphRow1')]),
                           html.Br(),
                           dcc.Loading(id='loading_dashboard_5',
+                                      children=[html.Div(id="dashboard_graphRow_3",
+                                                        children=[
+                                                                html.Div(id="", children=[
+                                                                        html.H4("Distribución por Sexo", id="", className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE PQR VS Sexo", id="distribucionSexo_graph", className="graficos")
+                                                                ], className='box'),
+                                                                html.Div(id="", children=[
+                                                                        html.H4("Distribución por Edad", id="",className="title"),
+                                                                        html.Div(id="",className="row", style={"width":"70%", 'padding':'1% 5% 1% 5%'},
+                                                                                children=graphs.dateFilter(id="")),
+                                                                        html.Div("GRAFICO DE PQR VS Edad", id="distribucionEdad_graph", className="graficos")
+                                                                ], className='box')
+
+                                                        ], className='row graphRow1')]),
+                          html.Br(),
+                          dcc.Loading(id='loading_dashboard_6',
                                       children=[html.Div(id="dashboard_graphRow_1",
                                                         children=[
                                                                 html.Div(id="", children=[
