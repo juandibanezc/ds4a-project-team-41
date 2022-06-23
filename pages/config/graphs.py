@@ -15,10 +15,10 @@ from nltk.corpus import stopwords
 from nltk.corpus import stopwords
 #nltk.download('punkt')
 import json
-import controller
+#import controller
 def dateFilter(id):
   output = [
-              html.Div(className="col-8 p-0",children=[
+              html.Div(children=[
                   dmc.DateRangePicker(
                               id={'type':"date-range-picker","index":id},
                               value=[(date.today().replace(month=1).replace(day=1)).strftime('%Y-%m-%d'),(date.today().replace(month=12).replace(day=calendar.monthrange(date.today().year, 12)[1])).strftime('%Y-%m-%d')],
@@ -159,33 +159,35 @@ def graph_distribucion_edad(df):
                        )
 
     return fig
-def tipo_pqr_vs_eps(ruta):
-    transaccion="""SELECT tipo_peticion.TIPO_PETICION, glb_entidads.razon_social 
-    FROM Modulo_PQR_Sector_Salud JOIN glb_entidads 
-    ON Modulo_PQR_Sector_Salud.glb_entidad_id=glb_entidads.id JOIN tipo_peticion ON 
-    Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id=tipo_peticion.ID
-    """
-    a=controller.query(ruta,transaccion)
-    df=pd.crosstab(a["razon_social"],a["TIPO_PETICION"])
-    fig=px.imshow(df,aspect="auto",labels=dict(x="Tipo de peticion", y="Entidad prestadora de salud", color="Numero de peticiones"))
-    return fig    
-def distribucion_pqrs_comunas(ruta):
-    transaccion="""SELECT tipo_peticion.TIPO_PETICION, glb_comunas_corregimientos.descripcion 
-    FROM Modulo_PQR_Sector_Salud JOIN glb_barrios_veredas 
-    ON Modulo_PQR_Sector_Salud.glb_barrio_vereda_id= glb_barrios_veredas.id JOIN glb_comunas_corregimientos ON 
-    glb_barrios_veredas.glb_comunas_corregimiento_id=glb_comunas_corregimientos.id JOIN tipo_peticion ON 
-    Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id=tipo_peticion.ID
-    """
-    a=controller.query(ruta,transaccion)
-    df=pd.crosstab(a["descripcion"],a["TIPO_PETICION"])
-    df=df.reset_index()
-    df=df[df["descripcion"].isin(['Comuna 1',"Comuna 2","Comuna 3","Comuna 4","Comuna 5","Comuna 6","Comuna 7","Comuna 8","Comuna 9","Comuna 10","Comuna 11"])]
-    df=df.set_index("descripcion")
-    #df=df.drop(columns=["TIPO_PETICION"])
-    df=df.sort_index(axis=0,ascending=True)
-    fig=px.imshow(df,aspect="auto",labels=dict(x="Tipo de peticion", y="Entidad prestadora de salud", color="Numero de peticiones"))
 
-    return fig
+# def tipo_pqr_vs_eps(ruta):
+#     transaccion="""SELECT tipo_peticion.TIPO_PETICION, glb_entidads.razon_social 
+#     FROM Modulo_PQR_Sector_Salud JOIN glb_entidads 
+#     ON Modulo_PQR_Sector_Salud.glb_entidad_id=glb_entidads.id JOIN tipo_peticion ON 
+#     Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id=tipo_peticion.ID
+#     """
+#     a=controller.query(ruta,transaccion)
+#     df=pd.crosstab(a["razon_social"],a["TIPO_PETICION"])
+#     fig=px.imshow(df,aspect="auto",labels=dict(x="Tipo de peticion", y="Entidad prestadora de salud", color="Numero de peticiones"))
+#     return fig    
+
+# def distribucion_pqrs_comunas(ruta):
+#     transaccion="""SELECT tipo_peticion.TIPO_PETICION, glb_comunas_corregimientos.descripcion 
+#     FROM Modulo_PQR_Sector_Salud JOIN glb_barrios_veredas 
+#     ON Modulo_PQR_Sector_Salud.glb_barrio_vereda_id= glb_barrios_veredas.id JOIN glb_comunas_corregimientos ON 
+#     glb_barrios_veredas.glb_comunas_corregimiento_id=glb_comunas_corregimientos.id JOIN tipo_peticion ON 
+#     Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id=tipo_peticion.ID
+#     """
+#     a=controller.query(ruta,transaccion)
+#     df=pd.crosstab(a["descripcion"],a["TIPO_PETICION"])
+#     df=df.reset_index()
+#     df=df[df["descripcion"].isin(['Comuna 1',"Comuna 2","Comuna 3","Comuna 4","Comuna 5","Comuna 6","Comuna 7","Comuna 8","Comuna 9","Comuna 10","Comuna 11"])]
+#     df=df.set_index("descripcion")
+#     #df=df.drop(columns=["TIPO_PETICION"])
+#     df=df.sort_index(axis=0,ascending=True)
+#     fig=px.imshow(df,aspect="auto",labels=dict(x="Tipo de peticion", y="Entidad prestadora de salud", color="Numero de peticiones"))
+
+#     return fig
     
 # def graph_heatmap_estado_dependence(ruta):
 #      """

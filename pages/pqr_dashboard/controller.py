@@ -292,3 +292,4 @@ def graph_distribucion_edad(date_filter,url):
             graph_output= ['An error ocurred, please try again']
 
         return [graph_output]
+
