@@ -176,6 +176,7 @@ def distribucion_pqrs_comunas(ruta):
     glb_barrios_veredas.glb_comunas_corregimiento_id=glb_comunas_corregimientos.id JOIN tipo_peticion ON 
     Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id=tipo_peticion.ID
     """
+    a=controller.query(ruta,transaccion)
     df=pd.crosstab(a["descripcion"],a["TIPO_PETICION"])
     df=df.reset_index()
     df=df[df["descripcion"].isin(['Comuna 1',"Comuna 2","Comuna 3","Comuna 4","Comuna 5","Comuna 6","Comuna 7","Comuna 8","Comuna 9","Comuna 10","Comuna 11"])]
