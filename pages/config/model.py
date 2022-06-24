@@ -1,11 +1,17 @@
-import sqlite3
+import psycopg2
+import pandas.io.sql as sqlio
 import pandas as pd
 
-def querier(ruta_db, query):
-     conn = sqlite3.connect(ruta_db)
-     c = conn.cursor()
-     c.execute("SELECT * FROM sqlite_master WHERE type='table';")
-     df = pd.read_sql_query(query, conn)
+def querier(transaccion):
+     conn=psycopg2.connect(dbname='ibague-test', user='team41admin@dsfa', host='dsfa.postgres.database.azure.com', password='Proyectofinal13', port='5432',connect_timeout=300)
+     cursor=conn.cursor()
+     
+     data = sqlio.read_sql_query(transaccion, conn)
+
+
+
+
+
      conn.close()
 
-     return df
+     return data
