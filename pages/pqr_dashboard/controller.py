@@ -292,3 +292,69 @@ def graph_distribucion_edad(date_filter,url):
             graph_output= ['An error ocurred, please try again']
 
         return [graph_output]
+
+
+# **** Graph 8 ****
+@app.callback([Output('distribucionPQRCOMUNA_graph','children')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_mapa_comunas(date_filter,url):
+
+        if url == '/pqr_dashboard':
+
+            q = """
+            SELECT 
+              glb_comunas_corregimientos.descripcion as id, 
+              COUNT(Modulo_PQR_Sector_Salud.id) as numero_de_pqrs 
+            FROM 
+              Modulo_PQR_Sector_Salud 
+              JOIN glb_barrios_veredas ON Modulo_PQR_Sector_Salud.glb_barrio_vereda_id = glb_barrios_veredas.id 
+              JOIN glb_comunas_corregimientos ON glb_barrios_veredas.glb_comunas_corregimiento_id = glb_comunas_corregimientos.id 
+              JOIN tipo_peticion ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id = tipo_peticion.ID
+            WHERE glb_comunas_corregimientos.descripcion LIKE 'Comuna %'
+            GROUP BY glb_comunas_corregimientos.descripcion
+            """
+            r = "./BDIBAGUE.db"
+            df = model.querier(ruta_db=r, query=q)
+
+            fig = graphs.graph_mapa_comunas(df)
+            graph_output = [dcc.Graph(id='mapaComunas_graph',
+                                      figure=fig,
+                                      config={'displaylogo': False})]
+
+        else:
+            graph_output= ['An error ocurred, please try again']
+
+        return [graph_output]
+
+
+# **** Graph 9 ****
+# @app.callback([Output('distribucionEdad_graph','children')],
+#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+#                Input('url', 'pathname')])
+# def graph_distribucion_edad(date_filter,url):
+
+#         if url == '/pqr_dashboard':
+
+#             q = """
+#             SELECT 
+#               tipo_peticion.TIPO_PETICION, 
+#               glb_comunas_corregimientos.descripcion 
+#             FROM 
+#               Modulo_PQR_Sector_Salud 
+#               JOIN glb_barrios_veredas ON Modulo_PQR_Sector_Salud.glb_barrio_vereda_id = glb_barrios_veredas.id 
+#               JOIN glb_comunas_corregimientos ON glb_barrios_veredas.glb_comunas_corregimiento_id = glb_comunas_corregimientos.id 
+#               JOIN tipo_peticion ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id = tipo_peticion.ID
+#             """
+#             r = "./BDIBAGUE.db"
+#             df = model.querier(ruta_db=r, query=q)
+
+#             fig = graphs.graph_mapa_comunas(df)
+#             graph_output = [dcc.Graph(id='mapaComunas_graph',
+#                                       figure=fig,
+#                                       config={'displaylogo': False})]
+
+#         else:
+#             graph_output= ['An error ocurred, please try again']
+
+#         return [graph_output]
