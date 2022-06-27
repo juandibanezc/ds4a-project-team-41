@@ -1,12 +1,15 @@
-import pandas as pd
-import dash
-from dash import html, dcc, Input, Output, State, ALL, MATCH
-import time
-import numpy as np
+from dash import Input, Output
+from dash.exceptions import PreventUpdate
 from app import app
-from datetime import datetime
 from pages.config import model, graphs
 
+# @app.callback(Output("modal-lg", "is_open"),
+#               Input("informeButton", "n_clicks"),
+#               State("modal-lg", "is_open"))
+# def toggle_modal(n1, is_open):
+#     if n1:
+#         return not is_open
+#     return is_open
 
 # **** KPI 1 ****
 @app.callback([Output('peticiones_count','children')],
@@ -16,13 +19,17 @@ def KPI_1(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
-            SELECT COUNT(DISTINCT a.id) as peticiones 
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
-            WHERE b.TIPO_PETICION IN ('Peticion')"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r,query=q)
+            q = f"""
+            SELECT 
+              COUNT(DISTINCT a.id) as peticiones 
+            FROM 
+              Modulo_PQR_Sector_Salud a
+              LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE 
+              b.TIPO_PETICION IN ('Peticion')
+              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
+            
+            df = model.querier(q)
             kpi_output = df.loc[0,'peticiones']
 
         else:
@@ -38,13 +45,17 @@ def KPI_2(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
-            SELECT COUNT(DISTINCT a.id) as sugerencias 
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
-            WHERE b.TIPO_PETICION IN ('Solicitud')"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r,query=q)
+            q = f"""
+            SELECT 
+              COUNT(DISTINCT a.id) as sugerencias 
+            FROM 
+              Modulo_PQR_Sector_Salud a
+              LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE 
+              b.TIPO_PETICION IN ('Solicitud')
+              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
+            
+            df = model.querier(q)
             kpi_output = df.loc[0,'sugerencias']
 
         else:
@@ -60,13 +71,17 @@ def KPI_3(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
-            SELECT COUNT(DISTINCT a.id) as reclamos 
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
-            WHERE b.TIPO_PETICION IN ('Reclamo')"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r,query=q)
+            q = f"""
+            SELECT 
+              COUNT(DISTINCT a.id) as reclamos 
+            FROM 
+              Modulo_PQR_Sector_Salud a
+              LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE 
+              b.TIPO_PETICION IN ('Reclamo')
+              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
+
+            df = model.querier(q)
             kpi_output = df.loc[0,'reclamos']
 
         else:
@@ -82,13 +97,17 @@ def KPI_4(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
-            SELECT COUNT(DISTINCT a.id) as quejas 
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
-            WHERE b.TIPO_PETICION IN ('Queja','Denuncia')"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r,query=q)
+            q = f"""
+            SELECT 
+              COUNT(DISTINCT a.id) as quejas 
+            FROM 
+              Modulo_PQR_Sector_Salud a
+              LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+            WHERE 
+              b.TIPO_PETICION IN ('Queja','Denuncia')
+              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
+
+            df = model.querier(q)
             kpi_output = df.loc[0,'quejas']
 
         else:
@@ -96,265 +115,236 @@ def KPI_4(date_filter,url):
 
         return [kpi_output]
 
-# **** Graph 1 ****
-@app.callback([Output('seguimientoPQR_graph','children')],
+# # **** Graph 1 ****
+@app.callback([Output('seguimientoPQR_graph','figure')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
-def graph_seguimiento_pqrs(date_filter,url):
+def seguimiento_pqrs(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
+            q = f"""
             SELECT 
-            CASE b.descripcion 
-            WHEN 'Radicado' THEN 'En Tramite'
-            WHEN 'Digitalizado' THEN 'En Tramite'
-            WHEN 'En Tramite' THEN 'En Tramite'
-            WHEN 'Proceso cerrado' THEN 'Resuelto'
-            WHEN 'Resuelto' THEN 'Resuelto'
-            WHEN 'Documentos sin respuesta' THEN 'Resuelto' END as estado, 
-            fecha_radicacion 
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN glb_estados b ON a.glb_estado_id = b.id"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
+              CASE b.descripcion 
+              WHEN 'Radicado' THEN 'En Tramite'
+              WHEN 'Digitalizado' THEN 'En Tramite'
+              WHEN 'En Tramite' THEN 'En Tramite'
+              WHEN 'Proceso cerrado' THEN 'Resuelto'
+              WHEN 'Resuelto' THEN 'Resuelto'
+              WHEN 'Documentos sin respuesta' THEN 'Resuelto' END as estado, 
+              to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') as fecha_radicacion 
+            FROM 
+              Modulo_PQR_Sector_Salud a
+              LEFT OUTER JOIN glb_estados b ON CAST(a.glb_estado_id AS varchar) = CAST(b.id AS varchar)
+            WHERE 
+              to_char(to_date(a.fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
+            df = model.querier(q)
             fig = graphs.graph_seguimiento_pqrs(df)
-            graph_output = [dcc.Graph(id='seguimientoPQR_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
 
         else:
-            graph_output= ['An error ocurred, please try again']
-
-        return [graph_output]
-
+            raise PreventUpdate
+        
+        return [fig]
 
 # # **** Graph 2 ****
-# @app.callback([Output('distribucionPQRCOMUNA_graph','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def graph_distribucion_comunas(date_filter,url):
+@app.callback([Output('distribucionPQRCOMUNA_graph','figure')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def mapa_comunas(date_filter,url):
 
-#         if url == '/pqr_dashboard':
+        if url == '/pqr_dashboard':
 
-#             q = """
-#             SELECT 
-#             fecha_radicacion 
-#             FROM Modulo_PQR_Sector_Salud a
-#             LEFT OUTER JOIN glb_estados b ON a.glb_estado_id = b.id"""
-#             r = "./BDIBAGUE.db"
-#             df = model.querier(ruta_db=r, query=q)
+            q = f"""
+            SELECT 
+              glb_comunas_corregimientos.descripcion as id, 
+              COUNT(Modulo_PQR_Sector_Salud.id) as cantidad 
+            FROM 
+              Modulo_PQR_Sector_Salud 
+              LEFT OUTER JOIN glb_barrios_veredas ON CAST(Modulo_PQR_Sector_Salud.glb_barrio_vereda_id AS varchar) = CAST(glb_barrios_veredas.id AS varchar) 
+              LEFT OUTER JOIN glb_comunas_corregimientos ON CAST(glb_barrios_veredas.glb_comunas_corregimiento_id AS varchar) = CAST(glb_comunas_corregimientos.id AS varchar) 
+              LEFT OUTER JOIN tipo_peticion ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
+            WHERE 
+              glb_comunas_corregimientos.descripcion LIKE 'Comuna %'
+              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'
+            GROUP BY 
+              glb_comunas_corregimientos.descripcion
+            """
 
-#             fig = graphs.graph_seguimiento_pqrs(df)
-#             graph_output = [dcc.Graph(id='seguimientoPQR_graph',
-#                                       figure=fig,
-#                                       config={'displaylogo': False})]
+            df = model.querier(q)
+            fig = graphs.graph_mapa_comunas(df)
+            
+        else:
+            raise PreventUpdate
 
-#         else:
-#             graph_output= ['An error ocurred, please try again']
-
-#         return [graph_output]
+        return [fig]
 
 
 # **** Graph 3 ****
-@app.callback([Output('distribucionEPS_graph','children')],
+@app.callback([Output('distribucionEPS_graph','figure')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
-def graph_distribucion_eps(date_filter,url):
+def graph_distribucion_entidad(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
+            q = f"""
             SELECT 
-            a.id,
-            b.razon_social as EPS
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN glb_entidads b ON a.glb_entidad_id = b.id
-            WHERE EPS IS NOT NULL"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
+              a.id,
+              b.razon_social as entidad
+            FROM 
+              Modulo_PQR_Sector_Salud a
+              LEFT OUTER JOIN glb_entidads b ON CAST(a.glb_entidad_id AS varchar) = CAST(b.id AS varchar)
+            WHERE 
+              b.razon_social IS NOT NULL
+              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
-            fig = graphs.graph_distribucion_eps(df)
-            graph_output = [dcc.Graph(id='distribucionEPS_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
+            df = model.querier(q)
+            fig = graphs.graph_distribucion_entidad(df)
 
         else:
-            graph_output= ['An error ocurred, please try again']
+            raise PreventUpdate
 
-        return [graph_output]
+        return [fig]
 
 
 # **** Graph 4 ****
-@app.callback([Output('distribucionIPS_graph','children')],
-              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-               Input('url', 'pathname')])
-def graph_distribucion_ips(date_filter,url):
-
-        if url == '/pqr_dashboard':
-
-            q = """
-            SELECT 
-            a.id,
-            b.razon_social as EPS
-            FROM Modulo_PQR_Sector_Salud a
-            LEFT OUTER JOIN glb_entidads b ON a.glb_entidad_id = b.id
-            WHERE EPS IS NOT NULL"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
-
-            fig = graphs.graph_distribucion_eps(df)
-            graph_output = [dcc.Graph(id='distribucionIPS_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
-
-        else:
-            graph_output= ['An error ocurred, please try again']
-
-        return [graph_output]
-
-
-# **** Graph 5 ****
-@app.callback([Output('distribucionSISBEN_graph','children')],
+@app.callback([Output('distribucionSISBEN_graph','figure')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_sisben(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
+            q = f"""
             SELECT 
-            ID,
-            PUNTAJE as sisben
-            FROM AMISALUD_TM_SISBEN_MENSUAL"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
+              a.identificacion,
+              a.puntaje as grupo
+            FROM 
+              AMISALUD_TM_SISBEN_MENSUAL a
+              --JOIN Modulo_PQR_Sector_Salud b
+              --ON CAST(a.identificacion AS varchar) = CAST(b.identificacion AS varchar)
+            --WHERE
+              --AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
+            df = model.querier(q)
             fig = graphs.graph_distribucion_sisben(df)
-            graph_output = [dcc.Graph(id='distribucionIPS_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
-
+            
         else:
-            graph_output= ['An error ocurred, please try again']
+            raise PreventUpdate
 
-        return [graph_output]
+        return [fig]
 
-# **** Graph 6 ****
-@app.callback([Output('distribucionSexo_graph','children')],
+# **** Graph 5 ****
+@app.callback([Output('distribucionSexo_graph','figure')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_sexo(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
+            q = f"""
             SELECT 
-            ID,
-            SEXO
-            FROM AMISALUD_TM_MAESTRO_AFILIADOS"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
+              a.identificacion,
+              a.sexo
+            FROM 
+              AMISALUD_TM_MAESTRO_AFILIADOS a
+              --JOIN Modulo_PQR_Sector_Salud b
+              --ON CAST(a.identificacion AS varchar) = CAST(b.identificacion AS varchar)
+            --WHERE
+              --AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
+            df = model.querier(q)
             fig = graphs.graph_distribucion_sexo(df)
-            graph_output = [dcc.Graph(id='distribucionSexo_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
 
         else:
-            graph_output= ['An error ocurred, please try again']
+            raise PreventUpdate
 
-        return [graph_output]
+        return [fig]
 
-# **** Graph 7 ****
-@app.callback([Output('distribucionEdad_graph','children')],
+# **** Graph 6 ****
+@app.callback([Output('distribucionEdad_graph','figure')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_edad(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
+            q = f"""
             SELECT 
             ID,
             FECHA_NACIMIENTO
-            FROM AMISALUD_TM_MAESTRO_AFILIADOS"""
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
+            FROM AMISALUD_TM_MAESTRO_AFILIADOS
+            --WHERE
+              --AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
+            df = model.querier(q)
             fig = graphs.graph_distribucion_edad(df)
-            graph_output = [dcc.Graph(id='distribucionEdad_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
 
         else:
-            graph_output= ['An error ocurred, please try again']
+            raise PreventUpdate
 
-        return [graph_output]
+        return [fig]
 
 
-# **** Graph 8 ****
-@app.callback([Output('distribucionPQRCOMUNA_graph','children')],
+# **** Graph 7 ****
+@app.callback([Output('distribucionTipoComuna_graph','figure')],
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
-def graph_mapa_comunas(date_filter,url):
+def graph_distribucion_tipo_peticion_comuna(date_filter,url):
 
         if url == '/pqr_dashboard':
 
-            q = """
+            q = f"""
             SELECT 
-              glb_comunas_corregimientos.descripcion as id, 
-              COUNT(Modulo_PQR_Sector_Salud.id) as numero_de_pqrs 
+              tipo_peticion.TIPO_PETICION as tipo_peticion, 
+              glb_comunas_corregimientos.descripcion 
             FROM 
               Modulo_PQR_Sector_Salud 
-              JOIN glb_barrios_veredas ON Modulo_PQR_Sector_Salud.glb_barrio_vereda_id = glb_barrios_veredas.id 
-              JOIN glb_comunas_corregimientos ON glb_barrios_veredas.glb_comunas_corregimiento_id = glb_comunas_corregimientos.id 
-              JOIN tipo_peticion ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id = tipo_peticion.ID
-            WHERE glb_comunas_corregimientos.descripcion LIKE 'Comuna %'
-            GROUP BY glb_comunas_corregimientos.descripcion
-            """
-            r = "./BDIBAGUE.db"
-            df = model.querier(ruta_db=r, query=q)
+              JOIN glb_barrios_veredas 
+              ON CAST(Modulo_PQR_Sector_Salud.glb_barrio_vereda_id AS varchar)= CAST(glb_barrios_veredas.id AS varchar) 
+              JOIN glb_comunas_corregimientos 
+              ON CAST(glb_barrios_veredas.glb_comunas_corregimiento_id AS varchar)= CAST(glb_comunas_corregimientos.id AS varchar) 
+              JOIN tipo_peticion 
+              ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar)= CAST(tipo_peticion.ID AS varchar)
+            WHERE
+              to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
-            fig = graphs.graph_mapa_comunas(df)
-            graph_output = [dcc.Graph(id='mapaComunas_graph',
-                                      figure=fig,
-                                      config={'displaylogo': False})]
+            df = model.querier(q)
+            fig = graphs.graph_distribucion_tipo_peticion_comuna(df)
+
 
         else:
-            graph_output= ['An error ocurred, please try again']
+            raise PreventUpdate
 
-        return [graph_output]
+        return [fig]
 
 
-# **** Graph 9 ****
-# @app.callback([Output('distribucionEdad_graph','children')],
-#               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
-#                Input('url', 'pathname')])
-# def graph_distribucion_edad(date_filter,url):
+# **** Graph 8 ****
+@app.callback([Output('distribucionTipoEntidad_graph','figure')],
+              [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
+               Input('url', 'pathname')])
+def graph_distribucion_tipo_peticion_entidad(date_filter,url):
 
-#         if url == '/pqr_dashboard':
+        if url == '/pqr_dashboard':
 
-#             q = """
-#             SELECT 
-#               tipo_peticion.TIPO_PETICION, 
-#               glb_comunas_corregimientos.descripcion 
-#             FROM 
-#               Modulo_PQR_Sector_Salud 
-#               JOIN glb_barrios_veredas ON Modulo_PQR_Sector_Salud.glb_barrio_vereda_id = glb_barrios_veredas.id 
-#               JOIN glb_comunas_corregimientos ON glb_barrios_veredas.glb_comunas_corregimiento_id = glb_comunas_corregimientos.id 
-#               JOIN tipo_peticion ON Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id = tipo_peticion.ID
-#             """
-#             r = "./BDIBAGUE.db"
-#             df = model.querier(ruta_db=r, query=q)
+            q = f"""
+            SELECT 
+              tipo_peticion.TIPO_PETICION as tipo_peticion, 
+              glb_entidads.razon_social as entidad
+            FROM 
+              Modulo_PQR_Sector_Salud 
+              JOIN glb_entidads 
+              ON CAST(Modulo_PQR_Sector_Salud.glb_entidad_id AS varchar) = CAST(glb_entidads.id AS varchar)
+              JOIN tipo_peticion 
+              ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
+            WHERE
+              to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
-#             fig = graphs.graph_mapa_comunas(df)
-#             graph_output = [dcc.Graph(id='mapaComunas_graph',
-#                                       figure=fig,
-#                                       config={'displaylogo': False})]
+            df = model.querier(q)
+            fig = graphs.graph_distribucion_tipo_peticion_entidad(df)
 
-#         else:
-#             graph_output= ['An error ocurred, please try again']
+        else:
+            raise PreventUpdate
 
-#         return [graph_output]
+        return [fig]
