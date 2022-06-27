@@ -121,7 +121,7 @@ def graph_distribucion_sisben(df: pd.DataFrame) -> Figure:
 
     # Getting the group out of Sisben score and grouping the data by Sisben group
     df['grupo'] = df['grupo'].str[0]
-    df_g = df.groupby(['grupo']).agg(pqr_count=('id', 'count'))
+    df_g = df.groupby(['grupo']).agg(pqr_count=('identificacion', 'count'))
     df_g = df_g.sort_values(by='pqr_count').reset_index(drop=False)
 
     # Creating plotly pie chart using the pre-processed data
@@ -151,7 +151,7 @@ def graph_distribucion_sexo(df: pd.DataFrame) -> Figure:
     """
 
     # Grouping the data by sex
-    df_g = df.groupby(['sexo']).agg(cantidad=('id', 'count'))
+    df_g = df.groupby(['sexo']).agg(cantidad=('identificacion', 'count'))
     df_g = df_g.sort_values(by='cantidad').reset_index(drop=False)
 
     # Creating plotly pie chart using the pre-processed data

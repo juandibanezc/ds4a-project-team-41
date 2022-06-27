@@ -1,11 +1,10 @@
 import dash_bootstrap_components as dbc
-from dash.exceptions import PreventUpdate
 import dash
 
-import os
+#import os
 #from flask import Flask
 #Suppress Dash server posts to console
-import logging as Flasklog
+#import logging as Flasklog
 #flog = Flasklog.getLogger('werkzeug')
 #flog.setLevel(Flasklog.ERROR)
 
@@ -18,4 +17,4 @@ app = dash.Dash(__name__, suppress_callback_exceptions=True, #  server=server,
     external_stylesheets=[
         [dbc.themes.BOOTSTRAP]
     ])
-app.title = 'PQR Analytics'
+app.title = 'PQRS Analytics'
