@@ -1,10 +1,8 @@
-from turtle import width
-import click
-from dash import html, dcc, Input, Output, State
-import dash_bootstrap_components as dbc
+from dash import html, dcc
 from app import app
-
-from pages.config import model, graphs
+import dash_mantine_components as dmc
+from datetime import date
+import calendar
 
 content = html.Div(children=[
                           dcc.Loading(id='loading_dashboard_1',
@@ -22,17 +20,17 @@ content = html.Div(children=[
                                                                                 ]),
                                                                         html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
                                                                                 html.H4("Peticiones", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3("15", id='peticiones_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                                html.H3(id='peticiones_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
                                                                         ])                                                      
                                                                 ], className="box"),
 
-                                                                html.Div(id="sugerencias_box", children=[
-                                                                        html.Div(id="sugerencias_title", style={'float':'left', 'width':'40%'},className="", children=[
-                                                                                html.Img(src='/assets/images/sugerencias-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
+                                                                html.Div(id="quejas_box", children=[
+                                                                        html.Div(id="quejas_title", style={'float':'left', 'width':'40%'},className="", children=[
+                                                                                html.Img(src='/assets/images/quejas-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
                                                                                 ]),
                                                                         html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
-                                                                                html.H4("Sugerencias", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3("15", id='sugerencias_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                                html.H4("Quejas", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
+                                                                                html.H3(id='quejas_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
                                                                         ])                                                
                                                                 ], className="box"),
 
@@ -42,19 +40,20 @@ content = html.Div(children=[
                                                                                 ]),
                                                                         html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
                                                                                 html.H4("Reclamos", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3("15", id='reclamos_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                                html.H3(id='reclamos_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
+                                                                        ])                                                
+                                                                ], className="box"),
+
+                                                                html.Div(id="sugerencias_box", children=[
+                                                                        html.Div(id="sugerencias_title", style={'float':'left', 'width':'40%'},className="", children=[
+                                                                                html.Img(src='/assets/images/sugerencias-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
+                                                                                ]),
+                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
+                                                                                html.H4("Sugerencias", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
+                                                                                html.H3(id='sugerencias_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
                                                                         ])                                                
                                                                 ], className="box"),
                                                                 
-                                                                html.Div(id="quejas_box", children=[
-                                                                        html.Div(id="quejas_title", style={'float':'left', 'width':'40%'},className="", children=[
-                                                                                html.Img(src='/assets/images/quejas-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
-                                                                                ]),
-                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
-                                                                                html.H4("Quejas", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3("15", id='quejas_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
-                                                                        ])                                                
-                                                                ], className="box"),
                                                         ], className='row KPI')]
                                                         ),
                           html.Br(),         
@@ -62,12 +61,12 @@ content = html.Div(children=[
                                       children=[html.Div(id="dashboard_graphRow_1",
                                                         children=[
                                                                 html.Div(id="seguimientoPQR_box", children=[
-                                                                        html.H4("Seguimiento de PQRs", id="seguimientoPQR_title", className="title"),
-                                                                        html.Div("GRAFICO DE SEGUMIENTO DE PQRS", id="seguimientoPQR_graph", className="graficos")
+                                                                        html.H4("Seguimiento de PQRS", id="seguimientoPQR_title", className="title"),
+                                                                        html.Div(dcc.Graph(id='seguimientoPQR_graph'), id="seguimientoPQR", className="graficos")
                                                                 ], className='boxGraph'),
                                                                 html.Div(id="distribucionPQRCOMUNA_box", children=[
-                                                                        html.H4("Distribución de PQRs por Comunas", id="distribucionPQRCOMUNA_title",className="title"),
-                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN DE PQRS POR COMUNAS", id="distribucionPQRCOMUNA_graph", className="graficos")
+                                                                        html.H4("Distribución de PQRS por Comunas", id="distribucionPQRCOMUNA_title",className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionPQRCOMUNA_graph'), id="distribucionPQRCOMUNA", className="graficos")
                                                                 ], className='boxGraph')
 
                                                         ], className='row graphRow1')]),
@@ -76,39 +75,41 @@ content = html.Div(children=[
                                       children=[html.Div(id="dashboard_graphRow_2",
                                                         children=[
                                                                 html.Div(id="distribucionEPS_box", children=[
-                                                                        html.H4("Distribución por EPS", id="", className="title"),
-                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR EPS", id="distribucionEPS_graph", className="graficos")
+                                                                        html.H4("Distribución de PQRS por Entidad", id="", className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionEPS_graph'), id="distribucionEPS", className="graficos")
                                                                 ], className='boxGraph'),
                                                                 html.Div(id="distribucionSISBEN_box", children=[
-                                                                        html.H4("Distribución por SISBEN", id="",className="title"),
-                                                                        html.Div("GRAFICO DE DISTRIBUCIÓN POR SISBEN", id="distribucionSISBEN_graph", className="graficos")
+                                                                        html.H4("Distribución de PQRS por Grupo de Sisben", id="",className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionSISBEN_graph'), id="distribucionSISBEN", className="graficos")
                                                                 ], className='boxGraph')
                                                         ], className='row graphRow1')]),
+                        
                         html.Br(),
                         dcc.Loading(id='loading_dashboard_5',
                                         children=[html.Div(id="dashboard_graphRow_3",
                                                         children=[
                                                                 html.Div(id="", children=[
-                                                                        html.H4("Tipo de PQR vs EPS", id="", className="title"),
-                                                                        html.Div("GRAFICO DE PQR VS EPS", id="PQRVSEPS_graph", className="graficos")
+                                                                        html.H4("Distribución de PQRS por Sexo", id="",className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionSexo_graph'), id="distribucionSexo", className="graficos")
                                                                 ], className='boxGraph'),
                                                                 html.Div(id="", children=[
-                                                                        html.H4("Tipo de PQR vs COMUNAS", id="",className="title"),
-                                                                        html.Div("GRAFICO DE PQR VS COMUNAS", id="PQRVSCOMUNAS_graph", className="graficos")
+                                                                        html.H4("Distribución de PQRS por Edad", id="",className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionEdad_graph'), id="distribucionEdad", className="graficos")
                                                                 ], className='boxGraph')
 
                                                         ], className='row graphRow1')]),
+                        
                         html.Br(),
                         dcc.Loading(id='loading_dashboard_6',
                                         children=[html.Div(id="dashboard_graphRow_4",
                                                         children=[
                                                                 html.Div(id="", children=[
-                                                                        html.H4("OTRO GRAFICO", id="",className="title"),
-                                                                        html.Div("OTRO GRAFICO", id="distribucionIPS_graph", className="graficos")
+                                                                        html.H4("Distribución Tipo Petición vs Comuna", id="",className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionTipoComuna_graph'), id="distribucionTipoComuna", className="graficos")
                                                                 ], className='boxGraph'),
                                                                 html.Div(id="", children=[
-                                                                        html.H4("OTRO GRAFICO", id="",className="title"),
-                                                                        html.Div("OTRO GRAFICO", id="PQRVSCOMUNAS_graph", className="graficos")
+                                                                        html.H4("Distribución Tipo Petición vs Entidad", id="",className="title"),
+                                                                        html.Div(dcc.Graph(id='distribucionTipoEntidad_graph'), id="distribucionTipoEntidad", className="graficos")
                                                                 ], className='boxGraph')
 
                                                         ], className='row graphRow1')]),
@@ -119,34 +120,37 @@ layout = html.Div(className='container-fluid',
                               children=[  
                               html.Div(className='row',
                                         children=[
-                                        html.H1(id='dashboard-title', children = 'PQR Dashboard', className="col-3", style={'float':'left','font-weight': 'bolder', 'font-size': 'xxx-large'}),
-                                        html.Div(children=[
-                                                dbc.Button('Generar Informe', id='informeButton', n_clicks=0, className='me-1', size='lg'),
-                                                dbc.Modal([
-                                                        dbc.ModalHeader(dbc.ModalTitle("Header")),
-                                                        dbc.ModalBody("Body Content of the Modal"),
-                                                ], id="modal-lg", size="lg", is_open=False),
-                                        ], className="col-3", style={'align-self':'center'}),
+                                        html.H1(id='dashboard-title', children = 'PQRS Dashboard', className="col-6", style={'float':'left','font-weight': 'bolder', 'font-size': 'xxx-large'}),
+                                        # html.Div(children=[
+                                        #         dbc.Button('Generar Informe', id='informeButton', n_clicks=0, className='me-1', size='lg'),
+                                        #         dbc.Modal([
+                                        #                 dbc.ModalHeader(dbc.ModalTitle("Header")),
+                                        #                 dbc.ModalBody("Body Content of the Modal"),
+                                        #         ], id="modal-lg", size="lg", is_open=False),
+                                        # ], className="col-3", style={'align-self':'center'}),
                                         html.Div(children=[
                                                 html.H4('Selecciona un rango de fecha:', style={'padding-right':'5%'}),
-                                                html.Div(id="date-filters-div",className="", style={"width":"50%", 'float':'right', 'padding':'1% 5% 1% 5%'},
-                                                                                children=graphs.dateFilter(id="pqr_dashboard"))
+                                                html.Div(id="date-filters-div",className="", style={"width":"70%", 'float':'right', 'padding':'1% 5% 1% 5%'},
+                                                                                children= [
+                                                                                  html.Div(children=[
+                                                                                      dmc.DateRangePicker(
+                                                                                                  id={'type':"date-range-picker","index":"pqr_dashboard"},
+                                                                                                  value=[(date.today().replace(month=1).replace(day=1)).strftime('%Y-%m-%d'),(date.today().replace(month=12).replace(day=calendar.monthrange(date.today().year, 12)[1])).strftime('%Y-%m-%d')],
+                                                                                                  amountOfMonths=2,
+                                                                                                  dropdownType="modal",
+                                                                                                  zIndex=1000,
+                                                                                                  shadow='sm',
+                                                                                                  modalZIndex=1000,
+                                                                                                  allowSingleDateInRange = True,
+                                                                                                  class_name=""
 
-                                        ], style={'float':'right', 'width':'50%', 'text-align':'right'}),
-                                       
-                                        
-                                      ]),
-                              html.Div(id='div-dashboard-MainContainer',
-                                       children=content)])
+                                                                                      )
+                                                                                  ])
+                                                                        ])
+                                                  ], style={'float':'right', 'width':'50%', 'text-align':'right'}),
+                                                ]),
+                                        html.Div(id='div-dashboard-MainContainer',
+                                                children=content)])
 
 
-def toggle_modal(n1, is_open):
-    if n1:
-        return not is_open
-    return is_open
 
-app.callback(
-    Output("modal-lg", "is_open"),
-    Input("informeButton", "n_clicks"),
-    State("modal-lg", "is_open"),
-)(toggle_modal)
