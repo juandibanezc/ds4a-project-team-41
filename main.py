@@ -20,7 +20,8 @@ from app import app
 from base.login import controller
 import requests
 
-#server = app.server
+server = app.server
+app.config.suppress_callback_exceptions = True
 
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -45,4 +46,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == '__main__':
-    app.run_server(debug=True, host="127.0.0.1", port=int(os.environ.get("PORT", 8085)))
+    app.run_server(debug=True, host="0.0.0.0", port=8080)#int(os.environ.get("PORT", 8080)))
