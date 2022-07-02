@@ -15,11 +15,9 @@ geopandas
 gunicorn
 itsdangerous==1.1.0
 Jinja2==3.0.1
-nltk
 pandas
 plotly
 psycopg2
-psycopg2-binary
 pyarrow
 python-dateutil
 python-dotenv
@@ -27,5 +25,4 @@ pytz
 requests
 requests-oauthlib
 urllib3
-wordcloud
 Werkzeug==1.0.1
