@@ -158,12 +158,12 @@ def mapa_comunas(date_filter,url):
             q = f"""
             SELECT 
               glb_comunas_corregimientos.descripcion as id, 
-              COUNT(Modulo_PQR_Sector_Salud.id) as cantidad 
+              COUNT(DISTINCT Modulo_PQR_Sector_Salud.id) as cantidad 
             FROM 
               Modulo_PQR_Sector_Salud 
-              LEFT OUTER JOIN glb_barrios_veredas ON CAST(Modulo_PQR_Sector_Salud.glb_barrio_vereda_id AS varchar) = CAST(glb_barrios_veredas.id AS varchar) 
-              LEFT OUTER JOIN glb_comunas_corregimientos ON CAST(glb_barrios_veredas.glb_comunas_corregimiento_id AS varchar) = CAST(glb_comunas_corregimientos.id AS varchar) 
-              LEFT OUTER JOIN tipo_peticion ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
+              JOIN glb_barrios_veredas ON CAST(Modulo_PQR_Sector_Salud.glb_barrio_vereda_id AS varchar) = CAST(glb_barrios_veredas.id AS varchar) 
+              JOIN glb_comunas_corregimientos ON CAST(glb_barrios_veredas.glb_comunas_corregimiento_id AS varchar) = CAST(glb_comunas_corregimientos.id AS varchar) 
+              JOIN tipo_peticion ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
             WHERE 
               glb_comunas_corregimientos.descripcion LIKE 'Comuna %'
               AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'
