@@ -21,7 +21,7 @@ DB_HOST = os.getenv('DB_HOST')
 DB_PSW = os.getenv('DB_PSW')
 DB_PORT = os.getenv('DB_PORT')
 
-def agregar_resultados(data_frame):
+def agregar_resultados_regresor(data_frame):
     """Esta funcion recibe un data frame con columnas (glb_dependencia_id VARCHAR(300), pqr_tipo_derechos VARCHAR(300), ase_tipo_poblacion_id VARCHAR(300),
                                 pqr_tipo_solicitud_especifica_id VARCHAR (300), fecha_vencimiento DATE, fecha_radicacion DATE,
                                 fecha_respuesta DATE)
@@ -40,6 +40,14 @@ def agregar_resultados(data_frame):
         print(datos)
         cursor.execute(transaccion_1,datos)
         conn.commit()
+    conn.close()
+def agregar_resultados_clasificador(asunto, resultado):
+    conn=psycopg2.connect(dbname='ibague-test', user='team41admin@dsfa', host='dsfa.postgres.database.azure.com', password='Proyectofinal13', port='5432',connect_timeout=300)
+    cursor=conn.cursor()
+    transaccion_1="""INSERT INTO resultados_2
+    (asunto, resultado) VALUES (%s, %s)"""
+    cursor.execute(transaccion_1,[asunto,resultado])
+    conn.commit()
     conn.close()
 
 
