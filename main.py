@@ -9,8 +9,6 @@ from base.header_navbar import controller
 from pages.pqr_dashboard import controller
 from pages.pqr_exploration import controller
 from pages.pqr_reports import controller
-from pages.profile import controller
-from pages.messages import controller
 
 
 from base.side_nav import view as side_nav
