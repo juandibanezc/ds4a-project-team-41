@@ -273,7 +273,7 @@ def graph_distribucion_edad(date_filter,url):
             q = f"""
             SELECT 
             ID,
-            FECHA_NACIMIENTO
+            to_char(to_date(FECHA_NACIMIENTO, 'dd/mm/yyyy'), 'yyyy-mm-dd')
             FROM AMISALUD_TM_MAESTRO_AFILIADOS
             --WHERE
               --AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
