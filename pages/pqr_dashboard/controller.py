@@ -189,12 +189,12 @@ def graph_distribucion_entidad(date_filter,url):
         if url == '/pqr_dashboard':
 
             q = f"""
-            SELECT 
-              a.id,
-              b.razon_social as entidad
-            FROM 
-              Modulo_PQR_Sector_Salud a
-              LEFT OUTER JOIN glb_entidads b ON CAST(a.glb_entidad_id AS varchar) = CAST(b.id AS varchar)
+            SELECT  a.id,  CASE 
+              WHEN b.razon_social='Nueva EPS Movilidad Subsidiado' THEN 'Nueva Eps Movilidad Subsidiado'
+              WHEN b.razon_social IS NULL THEN 'Entidad de salud no definida'
+              ELSE b.razon_social
+              END 
+            as entidad FROM Modulo_PQR_Sector_Salud a LEFT OUTER JOIN glb_entidads b ON CAST(a.glb_entidad_id AS varchar) = CAST(b.id AS varchar)
             WHERE 
               b.razon_social IS NOT NULL
               AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
