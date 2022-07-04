@@ -21,6 +21,9 @@ DB_HOST = os.getenv('DB_HOST')
 DB_PSW = os.getenv('DB_PSW')
 DB_PORT = os.getenv('DB_PORT')
 
+print(DB_NAME)
+print(DB_PSW)
+
 def agregar_resultados_regresor(data_frame):
     """Esta funcion recibe un data frame con columnas (glb_dependencia_id VARCHAR(300), pqr_tipo_derechos VARCHAR(300), ase_tipo_poblacion_id VARCHAR(300),
                                 pqr_tipo_solicitud_especifica_id VARCHAR (300), fecha_vencimiento DATE, fecha_radicacion DATE,

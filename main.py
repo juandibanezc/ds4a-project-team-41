@@ -29,11 +29,22 @@ app.layout = html.Div([
                     id = 'sidebar-menu',
                     className='sidebar',
                     children=[
-                        html.Img(src='/assets/images/logo-alcaldia.png', style={'width':'80%', 'padding':'10% 0% 10% 0%'}),
-                        html.A('',href='/pqr_dashboard',className='button-base home'),
-                        html.A('',href='/pqr_reports',className='button-base informes'),
-                        html.A('',href='/pqr_exploration',className='button-base pqr'),
-                        
+                        html.Img(className="logo_alcaldia", src='/assets/images/logo-alcaldia.png'),
+                        html.Div(children=[
+                            html.A(children=[
+                                html.Img(src='/assets/images/dashboard.png', className='button-base', alt="Dashboard")
+                            ],href='/pqr_dashboard')
+                        ],style={'padding':'5% 0%'}),
+                        html.Div(children=[
+                            html.A(children=[
+                                html.Img(src='/assets/images/informes.png',className='button-base')
+                            ],href='/pqr_reports')
+                        ],style={'padding':'5% 0%'}),
+                        html.Div(children=[
+                            html.A(children=[ 
+                                html.Img(src='/assets/images/pqr.png',className='button-base')
+                            ],href='/pqr_exploration')
+                        ],style={'padding':'5% 0%'}),
                     ]),
 
                 html.Div(

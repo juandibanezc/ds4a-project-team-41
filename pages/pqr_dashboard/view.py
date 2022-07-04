@@ -16,42 +16,42 @@ content = html.Div(children=[
                                                         children=[
                                                                 html.Div(id="peticiones_box", children=[
                                                                         html.Div(id="peticiones_title", style={'float':'left', 'width':'40%'},className="", children=[
-                                                                                html.Img(src='/assets/images/peticiones-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
+                                                                                html.Img(src='/assets/images/peticiones-icon.png', className="kpi-img")                                                                                
                                                                                 ]),
-                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
-                                                                                html.H4("Peticiones", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3(id='peticiones_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
-                                                                        ])                                                      
+                                                                        html.Div(children=[
+                                                                                html.H4("Peticiones", className="kpi-titles"),
+                                                                                html.H3(id='peticiones_count', className="kpi-counts")
+                                                                        ], className="title-kpi-div")                                                      
                                                                 ], className="box"),
 
                                                                 html.Div(id="quejas_box", children=[
                                                                         html.Div(id="quejas_title", style={'float':'left', 'width':'40%'},className="", children=[
-                                                                                html.Img(src='/assets/images/quejas-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
+                                                                                html.Img(src='/assets/images/quejas-icon.png', className="kpi-img")                                                                                
                                                                                 ]),
-                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
-                                                                                html.H4("Quejas", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3(id='quejas_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
-                                                                        ])                                                
+                                                                        html.Div(children=[
+                                                                                html.H4("Quejas", className="kpi-titles"),
+                                                                                html.H3(id='quejas_count', className="kpi-counts")
+                                                                        ], className="title-kpi-div")                                                
                                                                 ], className="box"),
 
                                                                 html.Div(id="reclamos_box", children=[
                                                                         html.Div(id="sugerencias_title", style={'float':'left', 'width':'40%'},className="", children=[
-                                                                                html.Img(src='/assets/images/reclamos-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
+                                                                                html.Img(src='/assets/images/reclamos-icon.png', className="kpi-img")                                                                                
                                                                                 ]),
-                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
-                                                                                html.H4("Reclamos", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3(id='reclamos_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
-                                                                        ])                                                
+                                                                        html.Div(children=[
+                                                                                html.H4("Reclamos", className="kpi-titles"),
+                                                                                html.H3(id='reclamos_count', className="kpi-counts")
+                                                                        ], className="title-kpi-div")                                                
                                                                 ], className="box"),
 
                                                                 html.Div(id="sugerencias_box", children=[
                                                                         html.Div(id="sugerencias_title", style={'float':'left', 'width':'40%'},className="", children=[
-                                                                                html.Img(src='/assets/images/sugerencias-icon.png', style={'width':'50pt', 'padding':'0%'})                                                                                
+                                                                                html.Img(src='/assets/images/sugerencias-icon.png', className="kpi-img")                                                                                
                                                                                 ]),
-                                                                        html.Div(style={'float':'right','width':'60%','padding':' 1% 0 1%'}, children=[
-                                                                                html.H4("Sugerencias", style={'fontWeight':'bold', 'font-size':'1.5vw'}),
-                                                                                html.H3(id='sugerencias_count', style={'fontWeight':'bold','text-align': 'center', 'font-size':'1.5vw'})
-                                                                        ])                                                
+                                                                        html.Div(children=[
+                                                                                html.H4("Sugerencias", className="kpi-titles"),
+                                                                                html.H3(id='sugerencias_count', className="kpi-counts")
+                                                                        ], className="title-kpi-div")                                                
                                                                 ], className="box"),
                                                                 
                                                         ], className='row KPI')]
@@ -120,7 +120,7 @@ layout = html.Div(className='container-fluid',
                               children=[  
                               html.Div(className='row',
                                         children=[
-                                        html.H1(id='dashboard-title', children = 'PQRS Dashboard', className="col-6", style={'float':'left','font-weight': 'bolder', 'font-size': 'xxx-large'}),
+                                        html.H1(id='dashboard-title', children = 'PQRS DASHBOARD', className="col-6 page-title"),
                                         # html.Div(children=[
                                         #         dbc.Button('Generar Informe', id='informeButton', n_clicks=0, className='me-1', size='lg'),
                                         #         dbc.Modal([
@@ -129,8 +129,8 @@ layout = html.Div(className='container-fluid',
                                         #         ], id="modal-lg", size="lg", is_open=False),
                                         # ], className="col-3", style={'align-self':'center'}),
                                         html.Div(children=[
-                                                html.H4('Selecciona un rango de fecha:', style={'padding-right':'5%'}),
-                                                html.Div(id="date-filters-div",className="", style={"width":"70%", 'float':'right', 'padding':'1% 5% 1% 5%'},
+                                                html.H4('Selecciona un rango de fecha:'),
+                                                html.Div(id="date-filters-div",className="",
                                                                                 children= [
                                                                                   html.Div(children=[
                                                                                       dmc.DateRangePicker(
@@ -142,12 +142,11 @@ layout = html.Div(className='container-fluid',
                                                                                                   shadow='sm',
                                                                                                   modalZIndex=1000,
                                                                                                   allowSingleDateInRange = True,
-                                                                                                  class_name=""
-
+                                                                                                  
                                                                                       )
                                                                                   ])
                                                                         ])
-                                                  ], style={'float':'right', 'width':'50%', 'text-align':'right'}),
+                                                  ], className="date_filter"),
                                                 ]),
                                         html.Div(id='div-dashboard-MainContainer',
                                                 children=content)])

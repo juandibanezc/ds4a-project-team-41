@@ -3,23 +3,28 @@
     background-color: #f5f8ff;
     font-family: Roboto, sans-serif;
     color: #393f5b; 
-    width: 94%;
+    width: 90%;
     float: right;
     padding: 2%;
     height: 100%;
 }
 
-
+.logo_alcaldia{
+    width:50%;
+    padding:10% 0% 10% 0%;
+}
 
 .sidebar{
     background-color: white;
-    width: 6%;
+    width: 10%;
     float: left;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 20px;
 }
+
 .box{
     background-color: white;
     border-radius: 10px;
@@ -60,20 +65,90 @@
     font-size: x-large;
     padding: 0% 0 2% 0;
 }
+
+.page-title{
+    float: left;
+    font-weight: bolder;
+    font-size: 3vw;
+    background-color: #1d275ae3;
+    color: #ffffffd1;
+    padding: 1.5%;
+    border-radius: 20px;
+    text-align: center;
+    align-self: center;
+}
+
+.date_filter{
+    float:right;
+    width:50%;
+    text-align:right;
+}
+
+#date-filters-div{
+    width: 70%;
+    float: right;
+}
+
+h4{
+    font-size: 1.5vw;
+}
+
+@media screen and (max-width:820px){
+    .sidebar{
+        background-color: white;
+        width: 100%;
+        display: grid;
+        grid-auto-flow: column;
+        padding: 0%;
+    }
+    .light{
+        background-color: #f5f8ff;
+        font-family: Roboto, sans-serif;
+        color: #393f5b; 
+        width: 100%;
+        padding: 2%;
+        height: 100%;
+    }
+    .logo_alcaldia{
+        width: 70%;
+        padding: 1%; 
+    }
+    .page-title{
+        font-size: 5vw;
+        width: 100%;
+        padding: 1.5%;
+        border-radius: 10px;
+        text-align: center;
+        
+    }
+    .date_filter{
+        width: 100%; 
+        text-align: left;
+        align-items: left;
+    }
+
+    #date-filters-div{
+        width: 60%;
+        float:left
+    }
+
+    h4{
+        font-size: 3.5vw;
+    }
+}
 /*#endregion */
 
 /*#region BUTTONS */
 .button-base{
+    width: 60%;
     background-size: 100%;
     border: none;
     background-color: white;
     image-rendering: pixelated;
-    height: 3.5vw;
-    margin: 5% 5%;
     background-repeat: no-repeat;
     background-position: center;
-    width: 60%;
     border-radius: 30%;
+    min-width: 60%;
 }
 .button-base:hover{
     background-color: #ced6e8 ;
@@ -109,25 +184,70 @@
 
 .row.KPI{
     display: grid;
-    grid-template: 110px / 23% 23% 23% 23%;
+    grid-template: auto / 23% 23% 23% 23%;
     vertical-align: middle;
     justify-content: space-evenly;
 }
-/*#endregion  */
+
 
 .row.graphRow1{
     display: grid;
-    grid-template: 60vh / 47.5% 47.5%;
+    grid-template: auto / 47.5% 47.5%;
     justify-content: space-evenly;
 }
 
 .row.graphRow2{
     display: grid;
-    grid-template: 60vh / 31.2% 31.2% 31.2%;
+    grid-template: 50vh / 31.2% 31.2% 31.2%;
     justify-content: space-evenly;
 }
 
-.dash-graph{
-    width: 40vw;
-    height: 40vh;
+.title-kpi-div{
+    float: right;
+    width: 60%;
+    padding: 5% 0px;
 }
+
+.kpi-counts{
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5vw;
+    margin: 0;
+}
+
+.kpi-titles{
+    font-weight: bold;
+    font-size: 1.5vw;
+}
+
+.kpi-img{
+    width: 7vw;
+    padding: 0% 0% 0% 10%;
+    float: left;
+}
+@media screen and (max-width:820px){
+    .row.KPI{
+        grid-template: auto / 45% 45%;
+        grid-row-gap: 1em;
+    }
+
+    .kpi-counts {
+        font-size: 3.5vw;
+    }
+
+    .kpi-titles{
+        font-size: 3.5vw;
+    }
+
+    .kpi-img{
+        width: 13vw;
+        padding: 0% 0% 0% 10%;
+        float: left;
+    }
+    .row.graphRow1{
+        grid-template: auto / 100%;
+        grid-row-gap: 1em;
+    }
+}
+
+/*#endregion  */
