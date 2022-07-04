@@ -17,9 +17,9 @@ def display_page(pathname, search):
 
         t1 = time.time()
 
-        redirect = {'/pqr_dashboard': pqr_dashboard.layout
-                    # '/pqr_exploration': pqr_exploration.layout,
-                    # '/pqr_reports': pqr_reports.layout,
+        redirect = {'/pqr_dashboard': pqr_dashboard.layout,
+                    '/pqr_exploration': pqr_exploration.layout,
+                    #'/pqr_reports': pqr_reports.layout,
                     # '/profile': profile.layout,
                     # '/messages': messages.layout,
                     # 'NoAccess': NoAccess.layout,

@@ -16,5 +16,5 @@ import dash
 app = dash.Dash(__name__, suppress_callback_exceptions=True, #  server=server,
     external_stylesheets=[
         [dbc.themes.BOOTSTRAP]
-    ])
+    ], external_scripts=[{'src':'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'}])
 app.title = 'PQRS Analytics'
