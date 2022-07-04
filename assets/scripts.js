@@ -16,4 +16,4 @@ function printPDF(){
         });
       }
 }
-setTimeout(printPDF,500)
+setTimeout(printPDF,1000)
