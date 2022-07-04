@@ -129,7 +129,7 @@ layout = html.Div(className='container-fluid',
                                         #         ], id="modal-lg", size="lg", is_open=False),
                                         # ], className="col-3", style={'align-self':'center'}),
                                         html.Div(children=[
-                                                html.H4('Selecciona un rango de fecha:'),
+                                                html.H4('Selecciona un rango de fecha(s):'),
                                                 html.Div(id="date-filters-div",className="",
                                                                                 children= [
                                                                                   html.Div(children=[
