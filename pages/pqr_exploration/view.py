@@ -2,7 +2,7 @@ from turtle import width
 from dash import html, dcc, Input, Output, State
 from app import app
 import dash_mantine_components as dmc
-from datetime import date
+from datetime import datetime, date
 import calendar
 import dash_bootstrap_components as dbc
 
@@ -25,7 +25,11 @@ estimacion_opcion2 = dbc.Card(
     dbc.CardBody(
         [
             dbc.Label("ID Tipo de Derechos:", className="mr-2"),
-            dbc.Input(id="",type="number", style={'width':'30%'}),
+            dbc.Select(id="tipo-derecho",options=[
+                {"label": "Poblacion 1", "value": "1"},
+                {"label": "Poblacion 2", "value": "2"},
+                {"label": "Poblacion 3", "value": "3"},
+            ], style={'width':'30%'}),
             html.Br(),
             dbc.Label("ID Tipo de Población:", className="mr-2"),
             dbc.Select(id="tipo-poblacion",options=[
@@ -49,11 +53,23 @@ estimacion_opcion2 = dbc.Card(
             ], style={'width':'30%'}),
             html.Br(),
             dbc.Label("Fecha de Radicación:", className="mr-2"),
-            dcc.DatePickerSingle(id='fecha_radicacion', min_date_allowed=date(1995, 1, 1), initial_visible_month=date(2022, 7, 7)),
-            html.Br(),html.Br(),
+            dmc.DatePicker(
+                id="fecha-radicacion",
+                minDate=date(2022, 1, 1),
+                maxDate=date(2022, 12, 31),
+                value=datetime.now().date(),
+                style={"width": 200}
+            ),
+            html.Br(),
             dbc.Label("Fecha de Vencimiento:", className="mr-2"),
-            dcc.DatePickerSingle(id='fecha_vencimiento', min_date_allowed=date(1995, 1, 1), initial_visible_month=date(2022, 7, 7)),
-            html.Br(),html.Br(),
+            dmc.DatePicker(
+                id="fecha-vencimiento",
+                minDate=date(2022, 1, 1),
+                maxDate=date(2022, 12, 31),
+                value=datetime.now().date(),
+                style={"width": 200}
+            ),
+            html.Br(),
             dbc.Button("Calcular Estimación", id="boton-estimacion2"),
             html.Br(),
             dbc.Label("Cantidad de Días en que se espera dar respuesta a la PQRs a partir de la fecha de radicación: ", className="mr-2"),

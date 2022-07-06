@@ -189,15 +189,29 @@ def graph_distribucion_entidad(date_filter,url):
         if url == '/pqr_dashboard':
 
             q = f"""
-            SELECT  a.id,  CASE 
-              WHEN b.razon_social='Nueva EPS Movilidad Subsidiado' THEN 'Nueva Eps Movilidad Subsidiado'
-              WHEN b.razon_social IS NULL THEN 'Entidad de salud no definida'
-              ELSE b.razon_social
-              END 
-            as entidad FROM Modulo_PQR_Sector_Salud a LEFT OUTER JOIN glb_entidads b ON CAST(a.glb_entidad_id AS varchar) = CAST(b.id AS varchar)
+            SELECT  
+              a.id,  
+              CASE
+                WHEN b.razon_social LIKE 'Sss Pijaos%' THEN 'Pijao Salud EPS'
+                WHEN b.razon_social LIKE 'Eps Pijao Salud%' THEN 'Pijao Salud EPS'
+                WHEN b.razon_social LIKE 'SSS salud total%' THEN 'Salud Total EPS'
+                WHEN b.razon_social LIKE 'Salud Total%' THEN 'Salud Total EPS'
+                WHEN b.razon_social LIKE 'SSS E.P.S. sanitas%' THEN 'Sanitas EPS'
+                WHEN b.razon_social LIKE 'Salud Sanitas%' THEN 'Sanitas EPS'
+                WHEN b.razon_social LIKE 'SSS Coomeva EPS%' THEN 'Coomeva EPS'
+                WHEN b.razon_social LIKE 'Coomeva Eps%' THEN 'Coomeva EPS'
+                WHEN b.razon_social LIKE 'Eps Famisanar%' THEN 'Famisanar EPS'
+                WHEN b.razon_social LIKE 'Medimas EPS%' THEN 'Medimas EPS'
+                WHEN b.razon_social LIKE 'Nueva EPS%' THEN 'Nueva EPS'
+                WHEN b.razon_social LIKE 'Nueva Eps%' THEN 'Nueva EPS'
+                ELSE 'Sin Informacion'
+              END AS entidad
+            FROM 
+              Modulo_PQR_Sector_Salud a 
+              JOIN glb_entidads b 
+              ON CAST(a.glb_entidad_id AS varchar) = CAST(b.id AS varchar)
             WHERE 
-              b.razon_social IS NOT NULL
-              AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
+              to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
 
             df = model.querier(q)
             fig = graphs.graph_distribucion_entidad(df)
@@ -273,7 +287,7 @@ def graph_distribucion_edad(date_filter,url):
             q = f"""
             SELECT 
             ID,
-            to_char(to_date(FECHA_NACIMIENTO, 'dd/mm/yyyy'), 'yyyy-mm-dd')
+            to_char(to_date(FECHA_NACIMIENTO, 'dd/mm/yyyy'), 'yyyy-mm-dd') AS fecha_nacimiento
             FROM AMISALUD_TM_MAESTRO_AFILIADOS
             --WHERE
               --AND to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'"""
@@ -331,10 +345,24 @@ def graph_distribucion_tipo_peticion_entidad(date_filter,url):
             q = f"""
             SELECT 
               tipo_peticion.TIPO_PETICION as tipo_peticion, 
-              glb_entidads.razon_social as entidad
+              CASE
+                WHEN razon_social LIKE 'Sss Pijaos%' THEN 'Pijao Salud EPS'
+                WHEN razon_social LIKE 'Eps Pijao Salud%' THEN 'Pijao Salud EPS'
+                WHEN razon_social LIKE 'SSS salud total%' THEN 'Salud Total EPS'
+                WHEN razon_social LIKE 'Salud Total%' THEN 'Salud Total EPS'
+                WHEN razon_social LIKE 'SSS E.P.S. sanitas%' THEN 'Sanitas EPS'
+                WHEN razon_social LIKE 'Salud Sanitas%' THEN 'Sanitas EPS'
+                WHEN razon_social LIKE 'SSS Coomeva EPS%' THEN 'Coomeva EPS'
+                WHEN razon_social LIKE 'Coomeva Eps%' THEN 'Coomeva EPS'
+                WHEN razon_social LIKE 'Eps Famisanar%' THEN 'Famisanar EPS'
+                WHEN razon_social LIKE 'Medimas EPS%' THEN 'Medimas EPS'
+                WHEN razon_social LIKE 'Nueva EPS%' THEN 'Nueva EPS'
+                WHEN razon_social LIKE 'Nueva Eps%' THEN 'Nueva EPS'
+                ELSE 'Sin Informacion'
+              END AS entidad
             FROM 
               Modulo_PQR_Sector_Salud 
-              JOIN glb_entidads 
+              JOIN glb_entidads
               ON CAST(Modulo_PQR_Sector_Salud.glb_entidad_id AS varchar) = CAST(glb_entidads.id AS varchar)
               JOIN tipo_peticion 
               ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
