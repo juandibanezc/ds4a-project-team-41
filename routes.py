@@ -19,7 +19,7 @@ def display_page(pathname, search):
 
         redirect = {'/pqr_dashboard': pqr_dashboard.layout,
                     '/pqr_exploration': pqr_exploration.layout,
-                    #'/pqr_reports': pqr_reports.layout,
+                    '/pqr_reports': pqr_reports.layout,
                     # '/profile': profile.layout,
                     # '/messages': messages.layout,
                     # 'NoAccess': NoAccess.layout,

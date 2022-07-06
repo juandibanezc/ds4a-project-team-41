@@ -37,10 +37,10 @@ app.layout = html.Div([
                             ],href='/pqr_dashboard')
                         ],style={'padding':'5% 0%','position':'relative'}),
                         html.Div(children=[
-                            html.Button(children=[
+                            html.A(children=[ 
                                 html.Img(src='/assets/images/informes.png',className='button-base'),
                                 html.Div(children=[html.H4('GENERAR INFORME', style={'color':'white', 'font-weight':'bolder', 'margin':'0%'})], className="option")
-                            ], type="button", style={'background-color': 'white','border':'none' }, id="descargar-reporte", n_clicks=0)
+                            ],href='/pqr_reports')
                         ],style={'padding':'5% 0%','position':'relative'}),
                         html.Div(children=[
                             html.A(children=[ 
