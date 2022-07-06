@@ -75,8 +75,8 @@ def prediccion_tiempo_respuesta_1(btn,id, url):
                State('tipo-poblacion', "value"),
                State('dependencia', "value"),
                State('entidad', "value"),
-               #State('fecha-radicacion', "value"),
-               #State('fecha-vencimiento', "value"),
+               State('fecha-radicacion', "value"),
+               State('fecha-vencimiento', "value"),
                State('url', 'pathname')], prevent_initial_call=True)
 def prediccion_tiempo_respuesta_2(*args):
 
@@ -90,8 +90,8 @@ def prediccion_tiempo_respuesta_2(*args):
           inputs['ase_tipo_poblacion_id'] = [int(ctx.states['tipo-poblacion.value'])] 
           inputs['glb_dependencia_id'] = [int(ctx.states['dependencia.value'])] 
           inputs['glb_entidad_id'] = [int(ctx.states['entidad.value'])] 
-          inputs['fecha_radicacion'] = ['2022-01-25']#[ctx.states['fecha-radicacion.value']] 
-          inputs['fecha_vencimiento'] = ['2022-06-24']#[ctx.states['fecha-vencimiento.value']] 
+          inputs['fecha_radicacion'] = [ctx.states['fecha-radicacion.value']] 
+          inputs['fecha_vencimiento'] = [ctx.states['fecha-vencimiento.value']] 
 
           prediction = OLSprediction(inputs,'assets/pkl/LR_model_BEST_prection.pickle')
 
