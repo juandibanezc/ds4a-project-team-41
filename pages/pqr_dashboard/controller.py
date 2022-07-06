@@ -17,7 +17,7 @@ from pages.config import model, graphs
                Input('url', 'pathname')])
 def KPI_1(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -43,7 +43,7 @@ def KPI_1(date_filter,url):
                Input('url', 'pathname')])
 def KPI_2(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -69,7 +69,7 @@ def KPI_2(date_filter,url):
                Input('url', 'pathname')])
 def KPI_3(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -95,7 +95,7 @@ def KPI_3(date_filter,url):
                Input('url', 'pathname')])
 def KPI_4(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -121,7 +121,7 @@ def KPI_4(date_filter,url):
                Input('url', 'pathname')])
 def seguimiento_pqrs(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -153,7 +153,7 @@ def seguimiento_pqrs(date_filter,url):
                Input('url', 'pathname')])
 def mapa_comunas(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -186,7 +186,7 @@ def mapa_comunas(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_entidad(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT  
@@ -228,7 +228,7 @@ def graph_distribucion_entidad(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_sisben(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -255,7 +255,7 @@ def graph_distribucion_sisben(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_sexo(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -282,7 +282,7 @@ def graph_distribucion_sexo(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_edad(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -307,7 +307,7 @@ def graph_distribucion_edad(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_tipo_peticion_comuna(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
@@ -340,7 +340,7 @@ def graph_distribucion_tipo_peticion_comuna(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_tipo_peticion_entidad(date_filter,url):
 
-        if url == '/pqr_dashboard':
+        if url in ['/pqr_dashboard', '/']:
 
             q = f"""
             SELECT 
