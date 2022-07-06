@@ -25,7 +25,11 @@ estimacion_opcion2 = dbc.Card(
     dbc.CardBody(
         [
             dbc.Label("ID Tipo de Derechos:", className="mr-2"),
-            dbc.Input(id="",type="number", style={'width':'30%'}),
+            dbc.Select(id="tipo-derecho",options=[
+                {"label": "Poblacion 1", "value": "1"},
+                {"label": "Poblacion 2", "value": "2"},
+                {"label": "Poblacion 3", "value": "3"},
+            ], style={'width':'30%'}),
             html.Br(),
             dbc.Label("ID Tipo de Población:", className="mr-2"),
             dbc.Select(id="tipo-poblacion",options=[

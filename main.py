@@ -18,7 +18,7 @@ from app import app
 #LOGIN
 from base.login import controller
 import requests
-import pdfkit
+#import pdfkit
 
 server = app.server
 app.config.suppress_callback_exceptions = True

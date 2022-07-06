@@ -22,6 +22,7 @@ pyarrow
 python-dateutil
 python-dotenv
 pytz
+statsmodels
 requests
 requests-oauthlib
 urllib3
