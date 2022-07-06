@@ -1,5 +1,5 @@
 from turtle import width
-from dash import html, dcc
+from dash import html, dcc, Input, Output, State
 from app import app
 import dash_mantine_components as dmc
 from datetime import date
@@ -52,6 +52,12 @@ estimacion_opcion2 = dbc.Card(
                 {"label": "Entidad 3", "value": "3"},
             ], style={'width':'30%'}),
             html.Br(),
+            dbc.Label("Fecha de Radicación:", className="mr-2"),
+            dcc.DatePickerSingle(id='fecha_radicacion', min_date_allowed=date(1995, 1, 1), initial_visible_month=date(2022, 7, 7)),
+            html.Br(),html.Br(),
+            dbc.Label("Fecha de Vencimiento:", className="mr-2"),
+            dcc.DatePickerSingle(id='fecha_vencimiento', min_date_allowed=date(1995, 1, 1), initial_visible_month=date(2022, 7, 7)),
+            html.Br(),html.Br(),
             dbc.Button("Calcular Estimación", id="boton-estimacion2"),
             html.Br(),
             dbc.Label("Cantidad de Días en que se espera dar respuesta a la PQRs a partir de la fecha de radicación: ", className="mr-2"),
@@ -112,3 +118,4 @@ layout = html.Div(className='container-fluid',
                                                 ]),
                                         html.Div(id='div-dashboard-MainContainer',
                                                 children=content)])
+
