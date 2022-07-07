@@ -15,7 +15,7 @@ estimacion_opcion1 = dbc.Card(
             dbc.Button("Calcular Estimación", id="boton-estimacion1"),
             html.Br(),
             dbc.Label("Cantidad de Días en que se espera dar respuesta a la PQRs a partir de la fecha de radicación: ", className="mr-2"),
-            dbc.Label("12", id="resultado-estimacion1", style={'font-weight':'bolder', 'font-size':'20pt'}),
+            dbc.Label(id="resultado-estimacion1", style={'font-weight':'bolder', 'font-size':'20pt'}),
         ]
     ),
     className="mt-3",
@@ -73,7 +73,7 @@ estimacion_opcion2 = dbc.Card(
             dbc.Button("Calcular Estimación", id="boton-estimacion2"),
             html.Br(),
             dbc.Label("Cantidad de Días en que se espera dar respuesta a la PQRs a partir de la fecha de radicación: ", className="mr-2"),
-            dbc.Label("12", id="resultado-estimacion2", style={'font-weight':'bolder', 'font-size':'20pt'}),
+            dbc.Label(id="resultado-estimacion2", style={'font-weight':'bolder', 'font-size':'20pt'}),
         ]
     ),
     className="mt-3",
