@@ -16,6 +16,11 @@ from pages.config import model, graphs
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def KPI_1(date_filter,url):
+        """
+        This function receives a time interval, makes a sql query to extract data from postgres database in that time interval, and returns
+        a the unatity of peticiones.
+    
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -42,6 +47,10 @@ def KPI_1(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def KPI_2(date_filter,url):
+        """
+        This function receives a time interval, makes a sql query to extract data from postgres database in that time interval, and returns
+        a the unatity of sugerencias.
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -68,6 +77,10 @@ def KPI_2(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def KPI_3(date_filter,url):
+        """
+        This function receives a time interval, makes a sql query to extract data from postgres database in that time interval, and returns
+        a the unatity of reclamos.
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -96,6 +109,12 @@ def KPI_3(date_filter,url):
 def KPI_4(date_filter,url):
 
         if url in ['/pqr_dashboard', '/']:
+            """
+            This function receives a time interval, makes a sql query to extract data from postgres database in that time interval, and returns
+            a the unatity of QUEJAS.
+            """
+            
+
 
             q = f"""
             SELECT 
@@ -120,6 +139,8 @@ def KPI_4(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def seguimiento_pqrs(date_filter,url):
+        """This function executes an SQL query on postgresql database to extract the current state of every pqr on database. The it plots
+        the data using plotly library and returns a fig element"""
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -152,6 +173,8 @@ def seguimiento_pqrs(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def mapa_comunas(date_filter,url):
+        """This function extracts from postgresql database the data of pqrs by comunas of Ibague City. Then, using
+        plotly libray, it plots a heatmap of that data and returns a fig element"""
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -185,6 +208,10 @@ def mapa_comunas(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_entidad(date_filter,url):
+        """
+        This function extracts from postgresql database the data of pqrs by heathcare entity, cleans the data, and generates
+        a plot using plotly. Then it returns a fig element.
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -227,6 +254,10 @@ def graph_distribucion_entidad(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_sisben(date_filter,url):
+        """
+        This function extracts from postgresql database the data of population by sisben classifcation,  and generates
+        a plot using plotly. Then it returns a fig element.
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -255,6 +286,11 @@ def graph_distribucion_sisben(date_filter,url):
                Input('url', 'pathname')])
 def graph_distribucion_sexo(date_filter,url):
 
+        """
+        This function extracts from postgresql database the data of population by sex in a time interval (argument),  and generates
+        a plot using plotly. Then it returns a fig element.
+        """
+
         if url in ['/pqr_dashboard', '/']:
 
             q = f"""
@@ -281,6 +317,11 @@ def graph_distribucion_sexo(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_edad(date_filter,url):
+        """
+        This function extracts from postgresql database the data of population by age in a time interval (argument),  and generates
+        a plot using plotly. Then it returns a fig element.
+        """
+
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -306,6 +347,10 @@ def graph_distribucion_edad(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_tipo_peticion_comuna(date_filter,url):
+        """
+        This function extracts from postgresql database the data of pqr by tipo de peticion and comuna 
+        in a time interval (argument),  and generates a plot using plotly. Then it returns a fig element.
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
@@ -339,6 +384,10 @@ def graph_distribucion_tipo_peticion_comuna(date_filter,url):
               [Input({'type':"date-range-picker","index":"pqr_dashboard"}, "value"),
                Input('url', 'pathname')])
 def graph_distribucion_tipo_peticion_entidad(date_filter,url):
+        """
+        This function extracts from postgresql database the data by tipo de peticion in a time interval (argument), 
+        cleans de data and generates a plotly figure. The that figure is returned 
+        """
 
         if url in ['/pqr_dashboard', '/']:
 
