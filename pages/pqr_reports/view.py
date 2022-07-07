@@ -10,7 +10,7 @@ content = html.Div(children=[
             html.Div([
                 dbc.Label("Seleccione un rango de fecha: ", className="mr-2"),
                 dmc.DateRangePicker(
-                                    id={'type':"date-range-picker","index":"pqr_dashboard"},
+                                    id={'type':"date-range-picker","index":"pqr_reports"},
                                     value=[(date.today().replace(month=1).replace(day=1)).strftime('%Y-%m-%d'),(date.today().replace(month=12).replace(day=calendar.monthrange(date.today().year, 12)[1])).strftime('%Y-%m-%d')],
                                     amountOfMonths=2,
                                     dropdownType="modal",
@@ -21,7 +21,8 @@ content = html.Div(children=[
                                     style={'width':'80%'}
                                 ),
                 html.Br(),
-                dbc.Button("Descargar Informe", color="success", className="me-1")
+                dbc.Button("Descargar Informe", id="report-button", color="success", className="me-1"),
+                dcc.Loading(html.Div(id="report-generation-alert"))
             ], style={'width':'40%', 'float':'left'}),
             html.Div([
                 dbc.Label("Seleccione los Gráficos que desea incluir en el informe: ", className="mr-2"),

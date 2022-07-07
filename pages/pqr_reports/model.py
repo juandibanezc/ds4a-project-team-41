@@ -7,6 +7,7 @@ import geopandas as gpd
 from typing import Tuple
 import pandas as pd
 import locale
+import sys, os
 
 # Set date names to spanish
 locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
@@ -60,7 +61,6 @@ def report_2(date_filter: list) -> Tuple[str,str]:
                       title_font_family='Rubik, sans-serif',
                       title_font_size=15
                       )
-  fig             
   fig.write_image("assets/images/report_2.svg")
 
   # Text section
@@ -71,7 +71,58 @@ def report_2(date_filter: list) -> Tuple[str,str]:
   text2 = f"""
   Durante el mes de {month_name.upper()} de {year}, se radicaron un total de {df_g['cantidad'].sum()} PQRS, de los cuales los grupos poblacionales con mayor vulneración de sus derechos en salud fueron los {df_g.loc[0,'edad_str'].lower()} con un {round((df_g.loc[0,'cantidad']/df_g['cantidad'].sum())*100,2)}% y los {df_g.loc[1,'edad_str'].lower()} con un porcentaje de {round((df_g.loc[1,'cantidad']/df_g['cantidad'].sum())*100,2)}%.
 
-  El {round((df_g.loc[df_g['comuna']=='SIN INFORMACIÓN','cantidad'].values[0]/df_g['cantidad'].sum())*100,2)}% de PQRS radicados no cuentan con la información para ser tabulados, ya que no se encuentran identificados, diligenciados los datos o fueron radicados por entidades públicas o privadas las cuales no aplican en esta clasificación.
+  El {round((df_g.loc[df_g['edad_str']=='SIN INFORMACIÓN','cantidad'].values[0]/df_g['cantidad'].sum())*100,2)}% de la información no se puede cuantificar (datos perdidos, datos no identificados, no diligenciados o información perteneciente a entidades).
+  """
+
+  return text1, text2
+
+
+def report_3(date_filter: list) -> Tuple[str,str]:
+
+  q = f"""
+              SELECT 
+                a.sexo,
+                COUNT(DISTINCT a.identificacion) AS cantidad
+              FROM 
+                AMISALUD_TM_MAESTRO_AFILIADOS a
+                --JOIN Modulo_PQR_Sector_Salud b
+                --ON CAST(a.identificacion AS varchar) = CAST(b.identificacion AS varchar)
+              GROUP BY
+                a.sexo
+              ORDER BY
+                cantidad DESC"""
+
+  df = querier(q)
+  date = datetime.strptime(date_filter[1], '%Y-%m-%d').date()
+  year = date.strftime("%Y")
+  month_name = (date.strftime("%B"))
+  gender_dict = {'F':'femenino','M':'masculino'}
+
+  # Creating plotly pie chart using the pre-processed data
+  fig = px.pie(df, values='cantidad', names='sexo', hole=.3)
+  fig.update_traces(textposition='inside')
+  fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+  fig.update_layout(margin=dict(t=120, b=60, l=40, r=40),
+                      plot_bgcolor='#fff',
+                      uniformtext_minsize=8, uniformtext_mode='hide',
+                      font={
+                          'family': 'Rubik, sans-serif',
+                          'color': '#515365'
+                      },
+                      title= f'Distribución de PQRS radicadas en secretaria de salud municipal de Ibague – Dirección de aseguramiento durante el {month_name} de {year}',
+                      title_x=0.5,
+                      title_font_family='Rubik, sans-serif',
+                      title_font_size=15
+                      )
+  fig.write_image("assets/images/report_3.svg")
+
+  # Text section
+  text1 = f"""
+  Se realiza la caracterización de la población que según la radicación de PQRS fueron radicadas durante el mes de {month_name.upper()} de {year}, identificando el género de mayor vulnerabilidad.
+  """
+
+  text2 = f"""
+  Durante el mes de {month_name.upper()} de {year} se radicaron un total de {df['cantidad'].sum()} PQRS, se brindó más apoyo con un {round((df.loc[0,'cantidad'].values[0]/df['cantidad'].sum())*100,2)}% a las personas de género {gender_dict[df.loc[0,'cantidad'].values[0]]} ante la vulneración de sus derechos, en el caso del género {gender_dict[df.loc[1,'cantidad'].values[0]]} se brindo un apoyo del {round((df.loc[1,'cantidad'].values[0]/df['cantidad'].sum())*100,2)}%.
   """
 
   return text1, text2
@@ -79,66 +130,71 @@ def report_2(date_filter: list) -> Tuple[str,str]:
 
 def report_4(date_filter: list) -> Tuple[str,str]:
 
-  q = f"""
-      SELECT 
-        CASE  
-          WHEN glb_comunas_corregimientos.descripcion LIKE 'Corregimiento%' THEN 'Rural'
-          ELSE glb_comunas_corregimientos.descripcion
-        END as comuna, 
-        COUNT(DISTINCT Modulo_PQR_Sector_Salud.id) as cantidad 
-      FROM 
-        Modulo_PQR_Sector_Salud 
-        LEFT OUTER JOIN glb_barrios_veredas ON CAST(Modulo_PQR_Sector_Salud.glb_barrio_vereda_id AS varchar) = CAST(glb_barrios_veredas.id AS varchar) 
-        LEFT OUTER JOIN glb_comunas_corregimientos ON CAST(glb_barrios_veredas.glb_comunas_corregimiento_id AS varchar) = CAST(glb_comunas_corregimientos.id AS varchar) 
-        LEFT OUTER JOIN tipo_peticion ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
-      WHERE 
-        to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'
-      GROUP BY 
-        comuna
-      """
+  try:
+    q = f"""
+        SELECT 
+          CASE  
+            WHEN glb_comunas_corregimientos.descripcion LIKE 'Corregimiento%' THEN 'Rural'
+            ELSE glb_comunas_corregimientos.descripcion
+          END as comuna, 
+          COUNT(DISTINCT Modulo_PQR_Sector_Salud.id) as cantidad 
+        FROM 
+          Modulo_PQR_Sector_Salud 
+          LEFT OUTER JOIN glb_barrios_veredas ON CAST(Modulo_PQR_Sector_Salud.glb_barrio_vereda_id AS varchar) = CAST(glb_barrios_veredas.id AS varchar) 
+          LEFT OUTER JOIN glb_comunas_corregimientos ON CAST(glb_barrios_veredas.glb_comunas_corregimiento_id AS varchar) = CAST(glb_comunas_corregimientos.id AS varchar) 
+          LEFT OUTER JOIN tipo_peticion ON CAST(Modulo_PQR_Sector_Salud.pqr_tipo_solicitud_id AS varchar) = CAST(tipo_peticion.ID AS varchar)
+        WHERE 
+          to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'
+        GROUP BY 
+          comuna
+        """
 
-  df = querier(q)
-  df.index = df['comuna']
-  comuna_list = ['Comuna 1', 'Comuna 2', 'Comuna 3', 'Comuna 4', 'Comuna 5', 'Comuna 6','Comuna 7', 'Comuna 8', 'Comuna 9', 'Comuna 10', 'Comuna 11', 'Comuna 12', 'Comuna 13', 'Rural', 'Sin Informacion']
-  comuna_list = [c for c in comuna_list if c in df['comuna'].unique()]
-  df = df.loc[comuna_list].reset_index(drop=True)
-  date = datetime.strptime(date_filter[1], '%Y-%m-%d').date()
-  year = date.strftime("%Y")
-  month_name = (date.strftime("%B"))
-  df_comunas = df[df['comuna'].str.startswith('Comuna')].sort_values(by='cantidad', ascending=False).reset_index(drop=True)
-  df_tail = df_comunas.tail(2).reset_index(drop=True)
-  
-  # Creating plotly bar chart using the pre-processed data
-  fig = px.bar(df, x="comuna", y="cantidad", orientation='v',
-      labels={"comuna": "Comuna",
-              "cantidad": "Cantidad de PQRS"}
-  )
-  fig.update_traces(texttemplate='%{y:.2s}', textposition='outside')
-  fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
-  fig.update_layout(
-                      plot_bgcolor='#fff',
-                      uniformtext_minsize=8, uniformtext_mode='hide',
-                      font={
-                          'family': 'Rubik, sans-serif',
-                          'color': '#515365'
-                      },
-                      title=f'Distribución de PQRS radicadas en la secretaria <br> de salud municipal de Ibagué - Dirección <br> de aseguramiento según comuna durante el mes de {month_name} de {year}',
-                      title_x=0.5,
-                      title_font_family='Rubik, sans-serif',
-                      title_font_size=15
-                      )
-  fig.write_image("assets/images/report_4.svg")
+    df = querier(q)
+    df.index = df['comuna']
+    comuna_list = ['Comuna 1', 'Comuna 2', 'Comuna 3', 'Comuna 4', 'Comuna 5', 'Comuna 6','Comuna 7', 'Comuna 8', 'Comuna 9', 'Comuna 10', 'Comuna 11', 'Comuna 12', 'Comuna 13', 'Rural', 'Sin Informacion']
+    comuna_list = [c for c in comuna_list if c in df['comuna'].unique()]
+    df = df.loc[comuna_list].reset_index(drop=True)
+    date = datetime.strptime(date_filter[1], '%Y-%m-%d').date()
+    year = date.strftime("%Y")
+    month_name = (date.strftime("%B"))
+    df_comunas = df[df['comuna'].str.startswith('Comuna')].sort_values(by='cantidad', ascending=False).reset_index(drop=True)
+    df_tail = df_comunas.tail(2).reset_index(drop=True)
+    
+    # Creating plotly bar chart using the pre-processed data
+    fig = px.bar(df, x="comuna", y="cantidad", orientation='v',
+        labels={"comuna": "Comuna",
+                "cantidad": "Cantidad de PQRS"}
+    )
+    fig.update_traces(texttemplate='%{y:.2s}', textposition='outside')
+    fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
+    fig.update_layout(
+                        plot_bgcolor='#fff',
+                        uniformtext_minsize=8, uniformtext_mode='hide',
+                        font={
+                            'family': 'Rubik, sans-serif',
+                            'color': '#515365'
+                        },
+                        title=f'Distribución de PQRS radicadas en la secretaria <br> de salud municipal de Ibagué - Dirección <br> de aseguramiento según comuna durante el mes de {month_name} de {year}',
+                        title_x=0.5,
+                        title_font_family='Rubik, sans-serif',
+                        title_font_size=15
+                        )
+    fig.write_image("assets/images/report_4.svg")
 
-  # Text section
-  text1 = f"""
-  Se realiza la caracterización de la población que según la radicación de PQRS del mes de {month_name.upper()} {year} se le han vulnerado sus derechos o sus requerimientos en salud, con esto podemos identificar qué comuna requiere apoyo.
-  """
+    # Text section
+    text1 = f"""
+    Se realiza la caracterización de la población que según la radicación de PQRS del mes de {month_name.upper()} {year} se le han vulnerado sus derechos o sus requerimientos en salud, con esto podemos identificar qué comuna requiere apoyo.
+    """
 
-  text2 = f"""
-  Durante el mes de {month_name.upper()} {year} se radicaron un total de {df['cantidad'].sum()} PQRS, de los cuales el {round((df_comunas.loc[0,'cantidad']/df['cantidad'].sum())*100,2)}% corresponde a la {df_comunas.loc[0,'comuna'].lower()}, {round((df_comunas.loc[1,'cantidad']/df['cantidad'].sum())*100,2)}% corresponde a la {df_comunas.loc[1,'comuna'].lower()}, {round((df_comunas.loc[2,'cantidad']/df['cantidad'].sum())*100,2)}% corresponden a la {df_comunas.loc[2,'comuna'].lower()} de Ibagué, donde los habitantes de estas comunas fueron los que más radicaron PQRS en busca del cumplimiento de sus derechos en salud.
-  En este periodo de tiempo la {df_tail.loc[0,'comuna'].lower()} y la {df_tail.loc[1,'comuna'].lower()} de Ibagué presentaron el nivel más bajo de PQRS radicados en la Dirección de Aseguramiento de la Secretaria de Salud Municipal de Ibagué ya que no realizó la radicación de ninguna queja, reclamo o sugerencia.
-  El {round((df.loc[df['comuna']=='Sin Informacion','cantidad'].values[0]/df['cantidad'].sum())*100,2)}% de PQRS radicados no cuentan con la información para ser tabulados, ya que no se encuentran identificados, diligenciados los datos o fueron radicados por entidades públicas o privadas las cuales no aplican en esta clasificación.
-  """
+    text2 = f"""
+    Durante el mes de {month_name.upper()} {year} se radicaron un total de {df['cantidad'].sum()} PQRS, de los cuales el {round((df_comunas.loc[0,'cantidad']/df['cantidad'].sum())*100,2)}% corresponde a la {df_comunas.loc[0,'comuna'].lower()}, {round((df_comunas.loc[1,'cantidad']/df['cantidad'].sum())*100,2)}% corresponde a la {df_comunas.loc[1,'comuna'].lower()}, {round((df_comunas.loc[2,'cantidad']/df['cantidad'].sum())*100,2)}% corresponden a la {df_comunas.loc[2,'comuna'].lower()} de Ibagué, donde los habitantes de estas comunas fueron los que más radicaron PQRS en busca del cumplimiento de sus derechos en salud.
+    En este periodo de tiempo la {df_tail.loc[0,'comuna'].lower()} y la {df_tail.loc[1,'comuna'].lower()} de Ibagué presentaron el nivel más bajo de PQRS radicados en la Dirección de Aseguramiento de la Secretaria de Salud Municipal de Ibagué ya que no realizó la radicación de ninguna queja, reclamo o sugerencia.
+    El {round((df.loc[df['comuna']=='Sin Informacion','cantidad'].values[0]/df['cantidad'].sum())*100,2)}% de PQRS radicados no cuentan con la información para ser tabulados, ya que no se encuentran identificados, diligenciados los datos o fueron radicados por entidades públicas o privadas las cuales no aplican en esta clasificación.
+    """
+  except Exception as e:
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    print(exc_type, fname, exc_tb.tb_lineno)
 
   return text1, text2
 

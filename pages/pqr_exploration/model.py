@@ -133,6 +133,15 @@ def OLSprediction(inputs, model_file_path):
 
 def textPrediction(text:str, model_file_path: str, vectorizer_file_path:str) -> str:
 
+    """
+    This function classifies the PQRS according to its topic into 3 major categories: Peticion, Solicitud and QRD (which stands for Quejas, Reclamos and Denuncias)
+    The function applies preliminary data cleaning and formatting and then transform the data using vectorization.
+    The resulting vector is fed into the model which is based on the Multinomial Naive Bayes Classifier.
+        Input: an string containig the topic of the PQR
+        
+        Output: it returns the kind of requirement which can fall into the following categories: Peticion, Solicitud and QRD
+    """
+
     with open(model_file_path, 'rb') as f:
       model = pickle.load(f)
     
