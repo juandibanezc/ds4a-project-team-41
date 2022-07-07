@@ -49,9 +49,19 @@ def generacion_reporte(btn, date_filter, url):
             
             outputText = template.render(data=data)
             
-            #return [outputText]
-            
-            pdfkit.from_string(outputText, './report_out.pdf')
+            options = {
+                'page-size': 'Letter',
+                'margin-top': '0.75in',
+                'margin-right': '0.75in',
+                'margin-bottom': '0.75in',
+                'margin-left': '0.75in',
+                'encoding': "UTF-8",
+                'custom-header': [
+                    ('Accept-Encoding', 'gzip')
+                ],
+            }
+
+            pdfkit.from_string(outputText, './report_out.pdf', options=options)
             
             return [send_file('./report_out.pdf', mime_type='application/pdf'), dbc.Alert('Informe generado con éxito!', is_open=True, color='success')]
 
