@@ -10,7 +10,7 @@ import locale
 import sys, os
 
 # Set date names to spanish
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+#locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 def report_2(date_filter: list) -> Tuple[str,str]:
 
