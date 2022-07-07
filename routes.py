@@ -10,10 +10,26 @@ from flask import render_template
 
 from app import server
 
+from pages.config import model
+
 @server.route('/report')
 def report():
+    
+    q = f"""
+    SELECT 
+        COUNT(DISTINCT a.id) as peticiones 
+    FROM 
+        Modulo_PQR_Sector_Salud a
+        LEFT OUTER JOIN tipo_peticion b ON a.pqr_tipo_solicitud_id = b.ID
+    WHERE 
+        b.TIPO_PETICION IN ('Peticion')
+        """
+    
+    df = model.querier(q)
+    kpi_output = df.loc[0,'peticiones']
+    
     data = {
-        'report_date' : r'23 de MARZO de 2022.',
+        'report_date' : kpi_output, #r'23 de MARZO de 2022.',
         'report_period' : r'ENERO DE 2022',
         'text1' : r'Durante el mes de ENERO DE 2022, se radicaron un total de 115 PQRS, correspondientes a la Dirección de Aseguramiento.',
         'text2' : r'Durante el mes de ENERO DE 2022, se radicaron un total de 115 PQRS, de los cuales los grupos poblacionales con mayor vulneración de sus derechos en salud fueron los adultos entre los 27 a los 59 años con un 32,17% y los infantes menores de 11 años con un porcentaje de 20,86%.',
