@@ -44,12 +44,6 @@ app.layout = html.Div([
                         ],style={'padding':'5% 0%','position':'relative'}),
                         html.Div(children=[
                             html.A(children=[ 
-                                html.Img(src='/assets/images/informes.png',className='button-base'),
-                                html.Div(children=[html.H4('GENERAR REPORTE', style={'color':'white', 'font-weight':'bolder', 'margin':'0%'})], className="option")
-                            ],href='/report', target="_blank")
-                        ],style={'padding':'5% 0%','position':'relative'}),
-                        html.Div(children=[
-                            html.A(children=[ 
                                 html.Img(src='/assets/images/pqr.png',className='button-base'),
                                 html.Div(children=[html.H4('MÓDULO DE ANÁLISIS', style={'color':'white', 'font-weight':'bolder', 'margin':'0%'})], className="option")
                             ],href='/pqr_exploration')

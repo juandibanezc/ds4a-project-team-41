@@ -5,6 +5,7 @@ import dash_mantine_components as dmc
 from datetime import date
 import calendar
 import dash_bootstrap_components as dbc
+from dash_extensions import Download
 
 content = html.Div(children=[
             html.Div([
@@ -21,8 +22,9 @@ content = html.Div(children=[
                                     style={'width':'80%'}
                                 ),
                 html.Br(),
-                dbc.Button("Descargar Informe", id="report-button", color="success", className="me-1"),
-                dcc.Loading(html.Div(id="report-generation-alert"))
+                dbc.Button("Generar Informe", id="report-button", color="success", className="me-1"),
+                dcc.Loading(html.Div(id="report-generation-alert")),
+                html.Div([html.Button("Download", id="btn"), Download(id="download")])
             ], style={'width':'40%', 'float':'left'}),
             html.Div([
                 dbc.Label("Seleccione los Gráficos que desea incluir en el informe: ", className="mr-2"),

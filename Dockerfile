@@ -11,7 +11,7 @@ ENV PORT 8080
 
 # Install Python dependencies and Gunicorn
 COPY requirements.txt .
-RUN apt-get update && apt-get install -y postgresql-server-dev-all gcc python3-dev musl-dev gdal-bin libgdal-dev g++
+RUN apt-get update && apt-get install -y postgresql-server-dev-all gcc python3-dev musl-dev gdal-bin libgdal-dev g++ wkhtmltopdf
 RUN pip install -r requirements.txt
 
 # Run the web service on container startup. Here we use the gunicorn
