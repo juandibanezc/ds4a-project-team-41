@@ -5,6 +5,7 @@ import dash_mantine_components as dmc
 from datetime import date
 import calendar
 import dash_bootstrap_components as dbc
+from dash_extensions import Download
 
 content = html.Div(children=[
             html.Div([
@@ -21,31 +22,10 @@ content = html.Div(children=[
                                     style={'width':'80%'}
                                 ),
                 html.Br(),
-                dbc.Button("Descargar Informe", id="report-button", color="success", className="me-1"),
-                dcc.Loading(html.Div(id="report-generation-alert"))
-            ], style={'width':'40%', 'float':'left'}),
-            html.Div([
-                dbc.Label("Seleccione los Gráficos que desea incluir en el informe: ", className="mr-2"),
-                html.Br(),
-                dbc.Checklist(
-                    options=[
-                        {"label": "Seguimiento de PQRs ", "value": 1},
-                        {"label": "Distribución de PQRs por Comunas", "value": 2},
-                        {"label": "Distribución de PQRs por Entidad", "value": 3},
-                        {"label": "Distribución de PQRS por Grupo de Sisben", "value": 4},
-                        {"label": "Distribución de PQRS por Sexo", "value": 5},
-                        {"label": "Distribución de PQRS por Edad", "value": 6},
-                        {"label": "Distribución Tipo Petición vs Comuna", "value": 7},
-                        {"label": "Distribución Tipo Petición vs Entidad", "value": 8},
-
-
-                    ],
-                    value=[1],
-                    id="checklist-input",
-                ),
-    
-            ], style={'width':'60%', 'float':'right'}),
-                
+                dbc.Button("Generar Informe", id="report-button", color="success", className="me-1"),
+                dcc.Loading(html.Div(id="report-generation-alert")),
+                html.Div([Download(id="download")])
+            ], style={'width':'40%', 'float':'left'}),                
             ],style={'padding':'1% 3%', 'background-color':'white', 'margin-top':'25px', 'border':'solid 1px #6c757d', 'border-radius':'5px', 'display':'flex'})
 
         

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+    <h1>SECRETARIA SALUD <small>DIRECCCION DE ASEGURAMIENTO</small></h1>
+
+    <p>Calle 15 Número 6-81</p>
+    <p>E-mail: aseguramiento@ibague.gov.co</p>
+    <p>Ibagué - Tolima</p>
+    <p></p>
+    <p>PARA: Claudia Teresa Solano de A.</p>
+    <p>Directora aseguramiento</p>
+    <p></p>
+    <p>ASUNTO: INFORME PQRS {{data['report_period']}}.</p>
+    <p>Como proceso interno y dando seguimiento a la recepción de las PQRS, relaciono en el siguiente informe las diferentes variables de información, según la información generada por la plataforma PISAMI el mes de ENERO DE 2022. En el informe se relacionarán diferentes datos, organizados en tablas y/o gráficos que permitan explicar y analizar los resultados obtenidos en cada periodo de la siguiente manera:</p>
+
+    <h2>1. TOTAL, DE PQRS RADICADOS POR MES:</h2>
+    <p>{{data['text1']}}</p>
+
+    <h2>2. DISTRIBUCIÓN DE LAS PQRS SEGÚN CURSO DE VIDA:</h2>
+    <p>{{data['text21']}}</p>
+    <img src="{{data['host_url']}}assets/images/report_2.svg">
+    <p>{{data['text22']}}</p>
+
+    <h2>3. DISTRIBUCIÓN DE LOS PQRS SEGÚN EL GÉNERO:</h2>
+    <p>{{data['text31']}}</p>
+    <img src="{{data['host_url']}}assets/images/report_3.svg">
+    <p>{{data['text32']}}</p>
+
+    <h2>4. DISTRIBUCIÓN DE LOS PQRS SEGÚN LA COMUNA A LA QUE PERTENECE:</h2>
+    <p>{{data['text41']}}</p>
+    <img src="{{data['host_url']}}assets/images/report_4.svg">
+    <p>{{data['text42']}}</p>
+
+    <h2>5. ANÁLISIS DE PQRS EN RELACION A LA EAPB:</h2>
+    <p>{{data['text51']}}</p>
+    <img src="{{data['host_url']}}assets/images/report_5.svg">
+    <p>{{data['text52']}}</p>
+
+    <h2>6. PETICIONES REGISTRADAS POR TIPO DE PQRS:</h2>
+    <p>{{data['text61']}}</p>
+    <img src="{{data['host_url']}}assets/images/report_6.svg">
+    <p>{{data['text62']}}</p>
+
+    <h2>8. PROCESOS CERRADOS Y GESTIONADOS</h2>
+    <p>{{data['text81']}}</p>
+    <img src="{{data['host_url']}}assets/images/report_8.svg">
+    <p>{{data['text82']}}</p>
+
+</body>
+</html>

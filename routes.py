@@ -5,7 +5,9 @@ from pages.pqr_reports import view as pqr_reports
 from app import app
 import time
 
-import app as server
+from app import server
+
+from pages.config import model
 
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname'),

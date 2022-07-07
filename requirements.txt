@@ -30,3 +30,5 @@ Unidecode
 Werkzeug==1.0.1
 pdfkit
 sklearn
+kaleido
+dash_extensions
