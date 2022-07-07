@@ -13,13 +13,12 @@ import pdfkit
 
 # **** Report Generation ****
 
-@app.callback(Output("download", "data"), [Input("btn", "n_clicks")])
+@app.callback(Output("download", "data"), [Input("btn", "n_clicks")], prevent_initial_call=True)
 def func(n_clicks):
     return send_file('./report_out.pdf', mime_type='application/pdf')
 
 
 @app.callback([Output('report-generation-alert','children')],
-              #Output("download", "data"),
               [Input('report-button', "n_clicks"),
                State({'type':"date-range-picker","index":"pqr_reports"}, "value"),
                State('url', 'pathname')], prevent_initial_call=True)
@@ -65,14 +64,11 @@ def generacion_reporte(btn, date_filter, url):
             
             pdfkit.from_string(outputText, './report_out.pdf')
             
-            return [outputText]
-            #return [send_file('./report_out.pdf', mime_type='application/pdf')]
+            return [dbc.Alert('Informe generado con éxito!', is_open=True, color='success')]
 
           except Exception as e:
             print(e)
-            return [dbc.Alert(f'There was an error during the report generation process: {e}', is_open=True, color='danger')]
-            #return None
-          
+            return [dbc.Alert(f'There was an error during the report generation process: {e}', is_open=True, color='danger')]  
+                  
         else:
             return None
-            #return None

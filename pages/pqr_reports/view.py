@@ -24,7 +24,7 @@ content = html.Div(children=[
                 html.Br(),
                 dbc.Button("Generar Informe", id="report-button", color="success", className="me-1"),
                 dcc.Loading(html.Div(id="report-generation-alert")),
-                html.Div([html.Button("Download", id="btn"), Download(id="download")])
+                html.Div([dbc.Button("Descargar Informe", id="btn"), Download(id="download")])
             ], style={'width':'40%', 'float':'left'}),
             html.Div([
                 dbc.Label("Seleccione los Gráficos que desea incluir en el informe: ", className="mr-2"),
