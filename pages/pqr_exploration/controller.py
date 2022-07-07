@@ -2,7 +2,7 @@ from dash import Input, Output, State
 from dash.exceptions import PreventUpdate
 import dash
 from app import app
-from pages.pqr_exploration.model import OLSprediction
+from pages.pqr_exploration.model import OLSprediction, textPrediction
 from pages.config.model import querier
 
 # **** Dynamic Fields ****
@@ -94,6 +94,25 @@ def prediccion_tiempo_respuesta_2(*args):
           inputs['fecha_vencimiento'] = [ctx.states['fecha-vencimiento.value']] 
 
           prediction = OLSprediction(inputs,'assets/pkl/LR_model_BEST_prection.pickle')
+
+        else:
+            prediction= ['An error ocurred, please try again']
+
+        return [prediction]
+
+# **** Text Classification Model ****
+@app.callback([Output('resultado-clasificacion','children')],
+              [Input('boton-clasificacion', "n_clicks"),
+               State('asunto-clasificacion', "value"),
+               State('url', 'pathname')], prevent_initial_call=True)
+def clasificacion_tipo_pqrs(btn, text, url):
+
+        ctx = dash.callback_context
+        url = ctx.states['url.pathname']
+
+        if url == '/pqr_exploration':
+
+          prediction = textPrediction(text, model_file_path='assets/pkl/naive_bayes.pkl', vectorizer_file_path='assets/pkl/vector.pkl')
 
         else:
             prediction= ['An error ocurred, please try again']

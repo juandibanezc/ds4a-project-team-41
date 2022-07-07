@@ -10,6 +10,9 @@ from dotenv import load_dotenv
 import pandas.io.sql as sqlio
 from pages.config.model import querier
 import os
+import unidecode
+import pickle
+import re
 
 def OLSprediction(inputs, model_file_path):
 
@@ -122,3 +125,20 @@ def OLSprediction(inputs, model_file_path):
                 print('%s= %s days'%(column, str(df_model[column].values[0])))
 
     return  str(df_model['tiempo_respuesta_predicho'].values[0]) 
+
+
+# =============================================================================
+# Text Classification Model
+# =============================================================================
+
+def textPrediction(text:str, model_file_path: str, vectorizer_file_path:str) -> str:
+
+    with open(model_file_path, 'rb') as f:
+      model = pickle.load(f)
+    
+    with open(vectorizer_file_path, 'rb') as f:
+      vect = pickle.load(f)
+
+    text = [re.sub('[^\w\s]','',unidecode.unidecode(text)).lower()]
+
+    return model.predict(vect.transform(text))

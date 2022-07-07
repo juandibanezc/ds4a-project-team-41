@@ -26,5 +26,6 @@ statsmodels
 requests
 requests-oauthlib
 urllib3
+Unidecode
 Werkzeug==1.0.1
 pdfkit

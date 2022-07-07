@@ -97,7 +97,7 @@ content = html.Div(children=[
                                                                 dbc.Button("Obtener Clasificación", id="boton-clasificacion"),
                                                                 html.Br(),
                                                                 dbc.Label("El asunto de PQR ingresado es de tipo:", className="mr-2"),
-                                                                dbc.Label("AFILIACIÓN", id="resultado-clasificacion", style={'font-weight':'bolder', 'font-size':'20pt'}),
+                                                                dbc.Label("", id="resultado-clasificacion", style={'font-weight':'bolder', 'font-size':'20pt'}),
                                                             ],
                                                             title="1. Módulo de Clasificación de PQRs",
                                                         ),
