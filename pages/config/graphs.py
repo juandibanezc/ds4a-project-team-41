@@ -127,7 +127,7 @@ def graph_distribucion_sisben(df: pd.DataFrame) -> Figure:
     # Creating plotly pie chart using the pre-processed data
     fig = px.pie(df_g, values='pqr_count', names='grupo')
     fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
-    fig.update_layout(margin=dict(t=40, b=40, l=40, r=40),
+    fig.update_layout(margin=dict(t=60, b=60, l=60, r=60),
                        plot_bgcolor='#fff',
                        font={
                            'family': 'Rubik, sans-serif',
@@ -157,7 +157,7 @@ def graph_distribucion_sexo(df: pd.DataFrame) -> Figure:
     # Creating plotly pie chart using the pre-processed data
     fig = px.pie(df_g, values='cantidad', names='sexo')
     fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
-    fig.update_layout(margin=dict(t=40, b=40, l=40, r=40),
+    fig.update_layout(margin=dict(t=60, b=60, l=60, r=60),
                        plot_bgcolor='#fff',
                        font={
                            'family': 'Rubik, sans-serif',
@@ -172,12 +172,12 @@ def graph_distribucion_sexo(df: pd.DataFrame) -> Figure:
 
 def graph_distribucion_edad(df: pd.DataFrame) -> Figure:
     """
-    Preprocess the data and creates a funnel chart that shows the amount of PQRS per sex.
+    Preprocess the data and creates a funnel chart that shows the amount of PQRS per age range.
     
     Args:
         df: Data to be pre-processed and used as input for the chart.
     Returns:
-        fig: Plotly Figure pie chart.
+        fig: Plotly Figure funnel chart.
     """
 
     # Transforming date of birth column to datetime and classifying each age in a category
@@ -224,7 +224,7 @@ def graph_distribucion_tipo_peticion_comuna(df: pd.DataFrame) -> Figure:
     Args:
         df: Data to be pre-processed and used as input for the chart.
     Returns:
-        fig: Plotly Figure image data.
+        fig: Plotly Figure heatmap chart.
     """
 
     # Creating cross table and filtering data of interest
@@ -262,7 +262,7 @@ def graph_distribucion_tipo_peticion_entidad(df: pd.DataFrame) -> Figure:
     Args:
         df: Data to be pre-processed and used as input for the chart.
     Returns:
-        fig: Plotly Figure image data.
+        fig: Plotly Figure heatmap chart.
     """
 
     # Creating cross table

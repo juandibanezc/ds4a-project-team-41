@@ -1,5 +1,4 @@
 from dash import Input, Output, State
-from base.login import view as login
 from pages.pqr_dashboard import view  as pqr_dashboard
 from pages.pqr_exploration import view as pqr_exploration
 from pages.pqr_reports import view as pqr_reports

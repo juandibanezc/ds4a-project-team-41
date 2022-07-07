@@ -122,7 +122,7 @@ def report_3(date_filter: list) -> Tuple[str,str]:
   """
 
   text2 = f"""
-  Durante el mes de {month_name.upper()} de {year} se radicaron un total de {df['cantidad'].sum()} PQRS, se brindó más apoyo con un {round((df.loc[0,'cantidad'].values[0]/df['cantidad'].sum())*100,2)}% a las personas de género {gender_dict[df.loc[0,'cantidad'].values[0]]} ante la vulneración de sus derechos, en el caso del género {gender_dict[df.loc[1,'cantidad'].values[0]]} se brindo un apoyo del {round((df.loc[1,'cantidad'].values[0]/df['cantidad'].sum())*100,2)}%.
+  Durante el mes de {month_name.upper()} de {year} se radicaron un total de {df['cantidad'].sum()} PQRS, se brindó más apoyo con un {round((df.loc[0,'cantidad']/df['cantidad'].sum())*100,2)}% a las personas de género {gender_dict[df.loc[0,'sexo']]} ante la vulneración de sus derechos, en el caso del género {gender_dict[df.loc[1,'sexo']]} se brindo un apoyo del {round((df.loc[1,'cantidad']/df['cantidad'].sum())*100,2)}%.
   """
 
   return text1, text2

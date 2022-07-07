@@ -19,11 +19,11 @@ def generacion_reporte(btn, date_filter, url):
             
             text_21, text_22 = model.report_2(date_filter)
             text_31, text_32 = model.report_3(date_filter)
-            text_41, text_41 = model.report_4(date_filter)
-            text_51, text_51 = model.report_5(date_filter)
-            text_61, text_61 = model.report_6(date_filter)
-            text_81, text_81 = model.report_8(date_filter)
-            print(text_81,text_81)
+            text_41, text_42 = model.report_4(date_filter)
+            text_51, text_52 = model.report_5(date_filter)
+            text_61, text_62 = model.report_6(date_filter)
+            text_81, text_82 = model.report_8(date_filter)
+            print(text_81,text_82)
 
             # Jinja2 function
             output = ['Finished']
