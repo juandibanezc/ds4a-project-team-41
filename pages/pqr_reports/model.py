@@ -12,6 +12,29 @@ import sys, os
 # Set date names to spanish
 locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
+def report_1(date_filter: list) -> str:
+
+  q = f"""
+              SELECT 
+                COUNT(distinct id) AS cantidad
+              FROM 
+                Modulo_PQR_Sector_Salud
+              WHERE 
+                to_char(to_date(fecha_radicacion, 'dd/mm/yyyy'), 'yyyy-mm-dd') BETWEEN '{date_filter[0]}' AND '{date_filter[1]}'
+              """
+
+  df = querier(q)
+  date = datetime.strptime(date_filter[1], '%Y-%m-%d').date()
+  year = date.strftime("%Y")
+  month_name = (date.strftime("%B"))
+
+  # Text section
+  text = f"""
+  Durante el mes de {month_name.upper()} de {year}, se radicaron un total de {df.loc[0,'cantidad']} PQRS, correspondientes a la Dirección de Aseguramiento.
+  """
+
+  return text
+
 def report_2(date_filter: list) -> Tuple[str,str]:
 
   q = f"""
@@ -56,7 +79,7 @@ def report_2(date_filter: list) -> Tuple[str,str]:
                           'family': 'Rubik, sans-serif',
                           'color': '#515365'
                       },
-                      title=f'Distribución de PQRS radicadas en secretaria de salud <br> municipal de Ibague - Dirección de Aseguramiento  <br> según curso de vida durante el mes de {month_name} de {year}',
+                      title=f'Distribución de PQRS radicadas en secretaria de salud municipal de Ibague -  <br> Dirección de Aseguramiento según curso de vida durante el mes de {month_name} de {year}',
                       title_x=0.5,
                       title_font_family='Rubik, sans-serif',
                       title_font_size=15
@@ -109,7 +132,7 @@ def report_3(date_filter: list) -> Tuple[str,str]:
                           'family': 'Rubik, sans-serif',
                           'color': '#515365'
                       },
-                      title= f'Distribución de PQRS radicadas en secretaria de salud municipal de Ibague – Dirección de aseguramiento durante el {month_name} de {year}',
+                      title= f'Distribución de PQRS radicadas en secretaria de salud municipal de <br> Ibague – Dirección de aseguramiento durante el {month_name} de {year}',
                       title_x=0.5,
                       title_font_family='Rubik, sans-serif',
                       title_font_size=15
@@ -135,6 +158,7 @@ def report_4(date_filter: list) -> Tuple[str,str]:
         SELECT 
           CASE  
             WHEN glb_comunas_corregimientos.descripcion LIKE 'Corregimiento%' THEN 'Rural'
+            WHEN glb_comunas_corregimientos.descripcion IS NULL Then 'Sin Informacion'
             ELSE glb_comunas_corregimientos.descripcion
           END as comuna, 
           COUNT(DISTINCT Modulo_PQR_Sector_Salud.id) as cantidad 
@@ -161,7 +185,7 @@ def report_4(date_filter: list) -> Tuple[str,str]:
     df_tail = df_comunas.tail(2).reset_index(drop=True)
     
     # Creating plotly bar chart using the pre-processed data
-    fig = px.bar(df, x="comuna", y="cantidad", orientation='v',
+    fig = px.bar(df[df['comuna'] != 'Sin Informacion'], x="comuna", y="cantidad", orientation='v',
         labels={"comuna": "Comuna",
                 "cantidad": "Cantidad de PQRS"}
     )
@@ -174,7 +198,7 @@ def report_4(date_filter: list) -> Tuple[str,str]:
                             'family': 'Rubik, sans-serif',
                             'color': '#515365'
                         },
-                        title=f'Distribución de PQRS radicadas en la secretaria <br> de salud municipal de Ibagué - Dirección <br> de aseguramiento según comuna durante el mes de {month_name} de {year}',
+                        title=f'Distribución de PQRS radicadas en la secretaria de salud municipal de Ibagué - Dirección <br> de aseguramiento según comuna durante el mes de {month_name} de {year}',
                         title_x=0.5,
                         title_font_family='Rubik, sans-serif',
                         title_font_size=15
@@ -235,7 +259,7 @@ def report_5(date_filter: list) -> Tuple[str,str]:
   month_name = (date.strftime("%B"))
 
   # Creating plotly pie chart
-  fig = px.pie(df, values='cantidad', names='entidad')
+  fig = px.pie(df[df['entidad'] != 'Sin Informacion'], values='cantidad', names='entidad')
   fig.update_traces(textposition='outside')
   fig.update_layout(legend=dict(traceorder='reversed', font_size=9))
   fig.update_layout(margin=dict(t=120, b=60, l=40, r=40),
