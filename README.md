@@ -1,5 +1,7 @@
-# Characterization and Classification of PQRs Using Natural Language Processing (NLP) Methods.
-## Development of an Informative Dashboard for the Mayor's Office of Ibagué. 
+# DS4A Cohort 6 - Final Capstone Report
+
+# Analysis and Characterization of PQRS  From Ibague’s Health Department.
+## Development of an Analytical Web Application for the Mayor's Office of Ibagué. 
 #### Correlation One | Colombia | Team 41
 Pablo Cortes, Juan Ibañez,  Santiago Jaramillo,  Manuel Jiménez,  Elmer Pérez,  Raúl Pineda, Alfonso Serrano, Willington Siabato
 
